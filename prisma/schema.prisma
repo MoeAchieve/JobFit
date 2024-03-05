@@ -8,25 +8,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            Int  @id @default(autoincrement())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role      @default(JOB_SEEKER)
+  phone        String?
+  role          Role      @default(STANDARD)
   accounts     Account[]
-}
-
-enum Role {
-  JOB_SEEKER
-  RECRUITER
-  ADMIN
+  profile       Profile?
+  jobs          Job[]
+  applications  Applicantion[]
+  companies     Company[]
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
+  id                 Int  @id @default(autoincrement())
+  userId             Int
   type               String
   provider           String
   providerAccountId  String
@@ -41,4 +40,131 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model Job {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  location    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  status      JOB_STATUS @default(Active)
+  applicants  Applicantion[]
+  company     Company  @relation(fields: [companyId], references: [id])
+  companyId   Int
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Applicantion {
+  id        Int      @id @default(autoincrement())
+  jobId     Int
+  userId    Int
+  status    Status   @default(PENDING)
+  resume    String
+  coverLetter String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  job       Job      @relation(fields: [jobId], references: [id])
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String
+  location  String
+  website   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [recruiterId], references: [id])
+  recruiterId    Int
+  jobs      Job[]
+}
+
+model Profile {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  name      String?
+  email     String?
+  bio       String?
+  location  String?
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  skills    Skill[]
+  languages Language[]
+  experiences Experience[]
+  educations Education[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+
+model Skill {
+  id        Int     @id @default(autoincrement())
+  name      String
+  profiles  Profile[]
+  @@unique([name])
+}
+
+model Language {
+  id        Int     @id @default(autoincrement())
+  name      String
+  level     String
+  profile   Profile[]
+  @@unique([name])
+}
+
+model Experience {
+  id        Int     @id @default(autoincrement())
+  title     String
+  company   String
+  location  String
+  from      DateTime
+  to        DateTime
+  current   Boolean
+  description String
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+}
+
+model Education {
+  id        Int     @id @default(autoincrement())
+  school    String
+  degree    String
+  field     String
+  from      DateTime
+  to        DateTime
+  current   Boolean
+  description String
+  gpa      Float?
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+}
+
+enum Role {
+  ADMIN
+  STANDARD
+}
+
+enum JOB_STATUS {
+  Expired
+  Active
+  Archived
+}
+
+enum JOB_TYPE {
+  FullTime
+  PartTime
+  Contract
+  Internship
+  Temporary
+  Volunteer
 }
