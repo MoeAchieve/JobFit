@@ -7,11 +7,20 @@ import { z } from "zod";
 import { login } from "@/services/login";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import BackLink from "./BackButton";
 import FormError from "../FormError";
 import FormSuccess from "../FormSuccess";
 import { FcGoogle } from "react-icons/fc";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 type LoginForm = z.infer<typeof LoginSchema>;
 
@@ -19,6 +28,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -26,6 +36,8 @@ export default function LoginForm() {
       password: "",
     },
   });
+
+  const togglePassword = () => setShowPassword((show) => !show);
 
   const onSubmit = (values: LoginForm) => {
     setError("");
@@ -97,9 +109,22 @@ export default function LoginForm() {
               id="name"
               label="Password"
               autoComplete="name"
-              type="password"
+              type={showPassword ? "text" : "password"}
               disabled={isPending}
               error={!!form.formState.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={togglePassword}
+                      disabled={isPending}
+                    >
+                      {showPassword ? <MdVisibility /> : <MdVisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               helperText={
                 form.formState.errors.password
                   ? form.formState.errors.password.message
