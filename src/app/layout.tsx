@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "@/theme";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import NavBar from "@/components/ui/AppBar";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -21,7 +22,10 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <ThemeProvider theme={theme}>
-          <body>{children}</body>
+          <body>
+            <NavBar />
+            {children}
+          </body>
         </ThemeProvider>
       </html>
     </SessionProvider>
