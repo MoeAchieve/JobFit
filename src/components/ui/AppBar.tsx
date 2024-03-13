@@ -14,18 +14,18 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import NavButton from "./NavButton";
+import AuthButton from "./AuthButton";
 import Link from "next/link";
 import { logout } from "@/services/logout";
-
-const pages = ["Products", "Pricing", "Blog"];
+import { Divider } from "@mui/material";
+import NavButton from "./NavButton";
 
 const settings = {
   Profile: "/profile",
   Dashboard: "/dashboard",
 };
 
-const NavMenu = ({ anchorEl, handleClose }: any) => {
+const NavMenu = ({ anchorEl, handleClose, loggedIn }: any) => {
   return (
     <Menu
       id="menu-appbar"
@@ -45,11 +45,26 @@ const NavMenu = ({ anchorEl, handleClose }: any) => {
         display: { xs: "block", md: "none" },
       }}
     >
-      {pages.map((page) => (
-        <MenuItem key={page} onClick={handleClose}>
-          {page}
-        </MenuItem>
-      ))}
+      <MenuItem onClick={handleClose} component={Link} href="/jobs">
+        <Typography textAlign="center">Find Jobs</Typography>
+      </MenuItem>
+      <MenuItem onClick={handleClose} component={Link} href="/companies">
+        <Typography textAlign="center">Browse Companies</Typography>
+      </MenuItem>
+      {!loggedIn && (
+        <div>
+          <MenuItem onClick={handleClose} component={Link} href="/auth/login">
+            <Typography textAlign="center">Login</Typography>
+          </MenuItem>
+          <MenuItem
+            onClick={handleClose}
+            component={Link}
+            href="/auth/register"
+          >
+            <Typography textAlign="center">Register</Typography>
+          </MenuItem>
+        </div>
+      )}
     </Menu>
   );
 };
@@ -77,10 +92,14 @@ const UserMenu = ({ anchorEl, handleClose }: any) => {
           <Typography textAlign="center">{key}</Typography>
         </MenuItem>
       ))}
-      <MenuItem
-        onClick={() => logout()}
-      >
+      <MenuItem onClick={() => logout()}>
         <Typography textAlign="center">Logout</Typography>
+      </MenuItem>
+      <Divider variant="middle" />
+      <MenuItem onClick={handleClose} component={Link} href="/jobs">
+        <Button variant="text" fullWidth>
+          Post Job
+        </Button>
       </MenuItem>
     </Menu>
   );
@@ -154,7 +173,11 @@ export default function NavBar() {
             >
               <IoMdMenu />
             </IconButton>
-            <NavMenu anchorEl={anchorElNav} handleClose={handleCloseNavMenu} />
+            <NavMenu
+              anchorEl={anchorElNav}
+              handleClose={handleCloseNavMenu}
+              loggedIn={user}
+            />
           </Box>
           {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
           <Typography
@@ -176,29 +199,12 @@ export default function NavBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  py: 3,
-                  borderBottom: "3px solid transparent",
-                  borderRadius: 0,
-                  color: "black",
-                  display: "block",
-                  ":hover": {
-                    color: "primary.main",
-                    backgroundColor: "primary.background",
-                    borderBottomColor: "primary.main",
-                  },
-                }}
-              >
-                {
-                  // large screen menu items
-                  page
-                }
-              </Button>
-            ))}
+            <NavButton variant="text" href="/jobs" label="Find Jobs" />
+            <NavButton
+              variant="text"
+              href="/companies"
+              label="Browse Companies"
+            />
           </Box>
           {user ? (
             <Box sx={{ flexGrow: 0 }}>
@@ -218,8 +224,13 @@ export default function NavBar() {
                 display: { xs: "none", md: "flex" },
               }}
             >
-              <NavButton href="/auth/login" label="Login" />
-              <NavButton href="auth/register" label="Sign Up" />
+              <AuthButton variant="text" href="/auth/login" label="Login" />
+              <Divider orientation="vertical" flexItem />
+              <AuthButton
+                variant="contained"
+                href="auth/register"
+                label="Sign Up"
+              />
             </Box>
           )}
         </Toolbar>

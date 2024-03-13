@@ -1,11 +1,11 @@
 "use client";
 
 import { createTheme } from "@mui/material/styles";
-import { Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["greek"],
+const inter = Inter({
+  weight: ["300", "400", "500", "600", "700", "900"],
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -20,7 +20,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: roboto.style.fontFamily,
+    fontFamily: inter.style.fontFamily,
   },
   palette: {
     primary: {

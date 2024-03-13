@@ -1,16 +1,20 @@
 "use client";
+import NavBar from "@/components/ui/AppBar";
 import { Container, Grid } from "@mui/material";
 
 export default function Home() {
   return (
-    <Container>
-      <main>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <h1>Home</h1>
+    <>
+      <NavBar />
+      <Container>
+        <main>
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <h1>Home</h1>
+            </Grid>
           </Grid>
-        </Grid>
-      </main>
-    </Container>
+        </main>
+      </Container>
+    </>
   );
 }

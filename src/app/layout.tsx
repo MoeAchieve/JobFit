@@ -23,7 +23,6 @@ export default async function RootLayout({
       <html lang="en">
         <ThemeProvider theme={theme}>
           <body>
-            <NavBar />
             {children}
           </body>
         </ThemeProvider>

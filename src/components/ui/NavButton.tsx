@@ -4,27 +4,28 @@ import Link from "next/link";
 interface INavButton {
   label: string;
   href: string;
+  variant: "text" | "outlined" | "contained" | undefined;
 }
 
-export default function NavButton({ label, href }: INavButton) {
+export default function NavButton({ variant, label, href }: INavButton) {
   return (
-    <Button
-      href={href}
-      LinkComponent={Link}
-      sx={{
-        py: 3,
-        borderBottom: "3px solid transparent",
-        borderRadius: 0,
-        color: "black",
-        display: "block",
-        ":hover": {
-          color: "primary.main",
-          backgroundColor: "primary.background",
-          borderBottomColor: "primary.main",
-        },
-      }}
-    >
-      {label}
-    </Button>
+    <Link href={href}>
+      <Button
+        variant={variant}
+        sx={{
+          py: 3,
+          borderBottom: "3px solid transparent",
+          borderRadius: 0,
+          color: "text.secondary",
+          ":hover": {
+            color: "primary.main",
+            borderBottomColor: "primary.main",
+            backgroundColor: "transparent",
+          },
+        }}
+      >
+        {label}
+      </Button>
+    </Link>
   );
 }
