@@ -3,7 +3,7 @@ import { prisma } from "@/config/prisma";
 import authConfig from "@/auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { Role } from "@prisma/client";
-import { getUserById } from "./lib/user";
+import { getUserById } from "./lib/actions/user";
 
 // type extendedUser = DefaultSession["user"] & {
 //   role: Role;

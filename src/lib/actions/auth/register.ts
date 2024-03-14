@@ -2,9 +2,9 @@
 
 import bcrypt from "bcryptjs"
 import * as z from "zod";
-import { RegisterSchema } from "@/schemas";
+import { RegisterSchema } from "@/lib/schemas";
 import { prisma } from "@/config/prisma";
-import { getUserByEmail } from "@/lib/user";
+import { getUserByEmail } from "@/lib/actions/user";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validated = RegisterSchema.safeParse(values);
@@ -27,6 +27,13 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       email,
       password: hashedPassword,
       name,
+      profile: {
+        create: {
+          bio: "",
+          location: "",
+          website: "",
+        },
+      }
     },
   });
 

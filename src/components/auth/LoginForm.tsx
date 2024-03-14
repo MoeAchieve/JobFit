@@ -2,9 +2,9 @@
 import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/schemas";
+import { LoginSchema } from "@/lib/schemas";
 import { z } from "zod";
-import { login } from "@/services/login";
+import { login } from "@/lib/actions/auth/login";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import {

@@ -2,7 +2,7 @@
 import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterSchema } from "@/schemas";
+import { RegisterSchema } from "@/lib/schemas";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
@@ -19,7 +19,7 @@ import BackLink from "./BackButton";
 import FormError from "../FormError";
 import FormSuccess from "../FormSuccess";
 import { FcGoogle } from "react-icons/fc";
-import { register } from "@/services/register";
+import { register } from "@/lib/actions/auth/register";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 type RegisterForm = z.infer<typeof RegisterSchema>;

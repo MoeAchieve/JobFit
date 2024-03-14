@@ -12,11 +12,11 @@ export default function NavButton({ variant, label, href }: INavButton) {
     <Link href={href}>
       <Button
         variant={variant}
+        color="secondary"
         sx={{
           py: 3,
           borderBottom: "3px solid transparent",
           borderRadius: 0,
-          color: "text.secondary",
           ":hover": {
             color: "primary.main",
             borderBottomColor: "primary.main",

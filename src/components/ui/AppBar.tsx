@@ -9,16 +9,16 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import { IoMdMenu } from "react-icons/io";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import AuthButton from "./AuthButton";
 import Link from "next/link";
-import { logout } from "@/services/logout";
+import { logout } from "@/lib/actions/auth/logout";
 import { Divider } from "@mui/material";
 import NavButton from "./NavButton";
+import UserAvatar from "./UserAvatar";
 
 const settings = {
   Profile: "/profile",
@@ -46,10 +46,10 @@ const NavMenu = ({ anchorEl, handleClose, loggedIn }: any) => {
       }}
     >
       <MenuItem onClick={handleClose} component={Link} href="/jobs">
-        <Typography textAlign="center">Find Jobs</Typography>
+        <Typography textAlign="center">Jobs</Typography>
       </MenuItem>
       <MenuItem onClick={handleClose} component={Link} href="/companies">
-        <Typography textAlign="center">Browse Companies</Typography>
+        <Typography textAlign="center">Companies</Typography>
       </MenuItem>
       {!loggedIn && (
         <div>
@@ -69,7 +69,7 @@ const NavMenu = ({ anchorEl, handleClose, loggedIn }: any) => {
   );
 };
 
-const UserMenu = ({ anchorEl, handleClose }: any) => {
+const UserMenu = ({ anchorEl, handleClose, user }: any) => {
   return (
     <Menu
       sx={{ mt: "45px" }}
@@ -87,6 +87,21 @@ const UserMenu = ({ anchorEl, handleClose }: any) => {
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
+      <Box
+        sx={{
+          p: 2,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <UserAvatar size="medium" name={user?.name} image={user?.image} />
+        <Box sx={{ ml: 2 }}>
+          <Typography textAlign="center" variant="h6">
+            {user?.name}
+          </Typography>
+        </Box>
+      </Box>
+      <Divider variant="middle" />
       {Object.entries(settings).map(([key, value]) => (
         <MenuItem key={key} onClick={handleClose} component={Link} href={value}>
           <Typography textAlign="center">{key}</Typography>
@@ -149,17 +164,17 @@ export default function NavBar() {
             noWrap
             component="a"
             href="/"
+            color="secondary"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "black",
               textDecoration: "none",
             }}
           >
-            LOGO
+            JobFit
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -169,7 +184,7 @@ export default function NavBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="primary"
+              color="secondary"
             >
               <IoMdMenu />
             </IconButton>
@@ -185,6 +200,7 @@ export default function NavBar() {
             noWrap
             component="a"
             href="/"
+            color="secondary"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -192,30 +208,30 @@ export default function NavBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "black",
               textDecoration: "none",
             }}
           >
-            LOGO
+            JobFit
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <NavButton variant="text" href="/jobs" label="Find Jobs" />
-            <NavButton
-              variant="text"
-              href="/companies"
-              label="Browse Companies"
-            />
+            <NavButton variant="text" href="/jobs" label="Jobs" />
+            <NavButton variant="text" href="/companies" label="Companies" />
           </Box>
           {user ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={user.image || ""} />
+                  <UserAvatar
+                    size="small"
+                    name={user?.name}
+                    image={user?.image}
+                  />
                 </IconButton>
               </Tooltip>
               <UserMenu
                 anchorEl={anchorElUser}
                 handleClose={handleCloseUserMenu}
+                user={user}
               />
             </Box>
           ) : (

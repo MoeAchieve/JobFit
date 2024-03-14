@@ -8,15 +8,15 @@ datasource db {
 }
 
 model User {
-  id            String  @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  phone        String?
-  role          Role      @default(STANDARD)
-  accounts     Account[]
+  phone         String?
+  role          Role           @default(STANDARD)
+  accounts      Account[]
   profile       Profile?
   jobs          Job[]
   applications  Applicantion[]
@@ -24,18 +24,18 @@ model User {
 }
 
 model Account {
-  id                 Int  @id @default(autoincrement())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                Int     @id @default(autoincrement())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -43,17 +43,18 @@ model Account {
 }
 
 model Job {
-  id          Int      @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   title       String
   description String
   location    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  user        User           @relation(fields: [userId], references: [id])
   userId      String
-  status      JOB_STATUS @default(Active)
+  type        JOB_TYPE       @default(FullTime)
+  status      JOB_STATUS     @default(Active)
   applicants  Applicantion[]
-  company     Company  @relation(fields: [companyId], references: [id])
+  company     Company        @relation(fields: [companyId], references: [id])
   companyId   Int
 }
 
@@ -64,89 +65,91 @@ enum Status {
 }
 
 model Applicantion {
-  id        Int      @id @default(autoincrement())
-  jobId     Int
-  userId    String
-  status    Status   @default(PENDING)
-  resume    String
+  id          Int      @id @default(autoincrement())
+  jobId       Int
+  userId      String
+  status      Status   @default(PENDING)
+  resume      String
   coverLetter String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-  job       Job      @relation(fields: [jobId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  job         Job      @relation(fields: [jobId], references: [id])
 }
 
 model Company {
-  id        Int      @id @default(autoincrement())
-  name      String
-  location  String
-  website   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [recruiterId], references: [id])
-  recruiterId    String
-  jobs      Job[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  location    String
+  website     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [recruiterId], references: [id])
+  recruiterId String
+  jobs        Job[]
 }
 
 model Profile {
-  id        Int     @id @default(autoincrement())
-  userId    String
-  name      String?
-  email     String?
-  bio       String?
-  location  String?
-  website   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  skills    Skill[]
-  languages Language[]
+  id          Int          @id @default(autoincrement())
+  userId      String
+  name        String?
+  email       String?
+  bio         String?
+  location    String?
+  website     String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  skills      Skill[]
+  languages   Language[]
   experiences Experience[]
-  educations Education[]
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  educations  Education[]
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
 }
 
 model Skill {
-  id        Int     @id @default(autoincrement())
-  name      String
-  profiles  Profile[]
+  id       Int       @id @default(autoincrement())
+  name     String
+  profiles Profile[]
+
   @@unique([name])
 }
 
 model Language {
-  id        Int     @id @default(autoincrement())
-  name      String
-  level     String
-  profile   Profile[]
+  id      Int       @id @default(autoincrement())
+  name    String
+  level   String
+  profile Profile[]
+
   @@unique([name])
 }
 
 model Experience {
-  id        Int     @id @default(autoincrement())
-  title     String
-  company   String
-  location  String
-  from      DateTime
-  to        DateTime
-  current   Boolean
+  id          Int      @id @default(autoincrement())
+  title       String
+  company     String
+  location    String
+  from        DateTime
+  to          DateTime
+  current     Boolean
   description String
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
+  profile     Profile  @relation(fields: [profileId], references: [id])
+  profileId   Int
 }
 
 model Education {
-  id        Int     @id @default(autoincrement())
-  school    String
-  degree    String
-  field     String
-  from      DateTime
-  to        DateTime
-  current   Boolean
+  id          Int      @id @default(autoincrement())
+  school      String
+  degree      String
+  field       String
+  from        DateTime
+  to          DateTime
+  current     Boolean
   description String
-  gpa      Float?
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
+  gpa         Float?
+  profile     Profile  @relation(fields: [profileId], references: [id])
+  profileId   Int
 }
 
 enum Role {

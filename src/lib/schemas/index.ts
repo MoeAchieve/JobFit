@@ -1,3 +1,4 @@
+import { Job } from "@prisma/client";
 import { z } from "zod";
 
 export const LoginSchema = z.object({
