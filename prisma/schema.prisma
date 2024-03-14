@@ -92,8 +92,6 @@ model Company {
 model Profile {
   id          Int          @id @default(autoincrement())
   userId      String
-  name        String?
-  email       String?
   bio         String?
   location    String?
   website     String?
@@ -119,7 +117,6 @@ model Skill {
 model Language {
   id      Int       @id @default(autoincrement())
   name    String
-  level   String
   profile Profile[]
 
   @@unique([name])
