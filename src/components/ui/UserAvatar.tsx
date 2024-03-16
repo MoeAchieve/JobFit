@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, CircularProgress } from "@mui/material";
 
 interface IUserAvatar {
   name: string | null | undefined;

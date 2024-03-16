@@ -26,6 +26,7 @@ export const {
   auth,
   signIn,
   signOut,
+  update,
 } = NextAuth({
   pages: {
     signIn: "/auth/login",
@@ -37,7 +38,7 @@ export const {
         where: { id: user.id },
         data: { emailVerified: new Date() },
       })
-    }
+    },
   },
   adapter: PrismaAdapter(prisma) as any,
   callbacks: {
@@ -46,6 +47,9 @@ export const {
       const user = await getUserById(token.sub);
       if (!user) return token;
       token.role = user.role;
+      token.name = user.name;
+      token.email = user.email;
+      token.image = user.image;
       return token;
     },
     async session({ token, session }) {
@@ -57,6 +61,11 @@ export const {
         session.user.role = token.role as Role;
       }
 
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.image as string;
+      }
       return session;
     },
   },
