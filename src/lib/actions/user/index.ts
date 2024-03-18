@@ -57,18 +57,17 @@ export const deleteUser = async (id: string) => {
   }
 }
 
-export const editUserProfile = async (id: string, data: any) => {
+export const uploadImage = async (id: string, path: string) => {
   try {
     return prisma.user.update({
       where: {
         id,
       },
       data: {
-        profile: {
-          update: data,
-        },
-      },
-    });
+        image: path,
+      }
+      }
+    )
   } catch (error) {
     return error;
   }

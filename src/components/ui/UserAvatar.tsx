@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, CircularProgress } from "@mui/material";
 
 interface IUserAvatar {
   name: string | null | undefined;
@@ -16,6 +16,7 @@ export default function UserAvatar({ name, image, size }: IUserAvatar) {
         width: avatarSize,
         height: avatarSize,
         fontSize: avatarFontSize,
+        mr: 1,
       }}
       alt={name || undefined}
       src={image || undefined}

@@ -1,4 +1,3 @@
-import { Job } from "@prisma/client";
 import { z } from "zod";
 
 export const LoginSchema = z.object({
@@ -22,4 +21,65 @@ export const RegisterSchema = z.object({
 }).refine((data) => data.password === data.cofngirmPassword, {
   message: "Passwords do not match",
   path: ["cofngirmPassword"],
+});
+
+export const changeNameSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+});
+
+export const editProfileSchema = z.object({
+  bio: z.optional(z.string().max(160, {
+    message: "Bio must be at most 100 characters",
+  })),
+  location: z.optional(z.string().min(1, {
+    message: "Location is required",
+  })),
+  website: z.optional(z.string()),
+});
+
+export const addExperienceSchema =
+  z.object({
+    title: z.string().min(1, {
+      message: "Title is required",
+    }),
+    company: z.string().min(1, {
+      message: "Company is required",
+    }),
+    location: z.string().min(1, {
+      message: "Location is required",
+    }),
+    from: z.optional(z.string().min(1, {
+      message: "From date is required",
+    })),
+    to: z.string().min(1, {
+      message: "To date is required",
+    }),
+    description: z.string().min(1, {
+      message: "Description is required",
+    }),
+    current: z.boolean(),
+  });
+
+export const editExperienceSchema = z.object({
+  title: z.optional(z.string().min(1, {
+    message: "Title is required",
+  })),
+  company: z.optional(z.string().min(1, {
+    message: "Company is required",
+  })),
+  location: z.optional(z.string().min(1, {
+    message: "Location is required",
+  })),
+  from: z.optional(z.string().min(1, {
+    message: "From date is required",
+  })),
+  to: z.optional(z.string().min(1, {
+    message: "To date is required",
+  })),
+  description: z.optional(z.string().min(1, {
+    message: "Description is required",
+  })),
+  current: z.optional(z.boolean()),
 });

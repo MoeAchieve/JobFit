@@ -19,6 +19,7 @@ import { logout } from "@/lib/actions/auth/logout";
 import { Divider } from "@mui/material";
 import NavButton from "./NavButton";
 import UserAvatar from "./UserAvatar";
+import Image from "next/image";
 
 const settings = {
   Profile: "/profile",
@@ -70,6 +71,8 @@ const NavMenu = ({ anchorEl, handleClose, loggedIn }: any) => {
 };
 
 const UserMenu = ({ anchorEl, handleClose, user }: any) => {
+  const name = user.name.split(" ").slice(0, 2).join(" ");
+
   return (
     <Menu
       sx={{ mt: "45px" }}
@@ -96,8 +99,16 @@ const UserMenu = ({ anchorEl, handleClose, user }: any) => {
       >
         <UserAvatar size="medium" name={user?.name} image={user?.image} />
         <Box sx={{ ml: 2 }}>
-          <Typography textAlign="center" variant="h6">
-            {user?.name}
+          <Typography
+            textAlign="center"
+            variant="h6"
+            sx={{
+              typography: {
+                xs: "body1",
+              },
+            }}
+          >
+            {name}
           </Typography>
         </Box>
       </Box>
@@ -158,25 +169,18 @@ export default function NavBar() {
             },
           }}
         >
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-          <Typography
-            variant="h6"
-            noWrap
+          <Box
             component="a"
             href="/"
-            color="secondary"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              textDecoration: "none",
-            }}
+            sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}
           >
-            JobFit
-          </Typography>
-
+            <Image
+              src="/images/logo1.png"
+              alt="JobFit Logo"
+              width={70}
+              height={70}
+            />
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -194,25 +198,18 @@ export default function NavBar() {
               loggedIn={user}
             />
           </Box>
-          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
-          <Typography
-            variant="h5"
-            noWrap
+          <Box
             component="a"
             href="/"
-            color="secondary"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              textDecoration: "none",
-            }}
+            sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}
           >
-            JobFit
-          </Typography>
+            <Image
+              src="/images/logo1.png"
+              alt="JobFit Logo"
+              width={100}
+              height={100}
+            />
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <NavButton variant="text" href="/jobs" label="Jobs" />
             <NavButton variant="text" href="/companies" label="Companies" />

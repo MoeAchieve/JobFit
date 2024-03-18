@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "@/lib/theme";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 import NavBar from "@/components/ui/AppBar";
 
 export const metadata: Metadata = {
@@ -21,11 +22,13 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <ThemeProvider theme={theme}>
-          <body>
-            {children}
-          </body>
-        </ThemeProvider>
+        <EdgeStoreProvider>
+          <ThemeProvider theme={theme}>
+            <body>
+              {children}
+            </body>
+          </ThemeProvider>
+        </EdgeStoreProvider>
       </html>
     </SessionProvider>
   );

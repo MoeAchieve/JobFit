@@ -1,0 +1,160 @@
+"use client";
+
+import { editProfileSchema } from "@/lib/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { MouseEvent } from "react";
+import SaveButton from "../ui/SaveButton";
+import { useCurrentUser } from "@/hooks/use-current-user";
+
+export default function ProfileForm() {
+  const user = useCurrentUser();
+  const [data, setData] = useState({ bio: "", location: "", website: "" });
+  const [show, setShow] = useState(false);
+
+  const form = useForm({
+    resolver: zodResolver(editProfileSchema),
+    defaultValues: {
+      bio: data.bio,
+      location: data.location,
+      website: data.website,
+    },
+  });
+
+  const handleCancle = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    form.reset({
+      bio: data.bio,
+      location: data.location,
+      website: data.website,
+    });
+    setShow(false);
+  };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const res = await fetch(`/api/profile/${user?.id}`);
+      const json = await res.json();
+      setData(json.profile);
+    };
+
+    fetchProfile();
+  }, []);
+
+  const { watch } = form;
+  const bio = watch("bio") || "";
+  const bioCharsLeft = 160 - bio.length;
+
+  useEffect(() => {
+    form.reset({
+      bio: data.bio,
+      location: data.location,
+      website: data.website,
+    });
+  }, [data, form]);
+
+  const onSubmit = async (values: any) => {
+    const { bio, location, website } = values;
+    await fetch("/api/profile/edit", {
+      method: "PUT",
+      body: JSON.stringify({ bio, location, website }),
+    });
+    setShow(false);
+  };
+
+  return (
+    <Box
+      component="form"
+      mt={4}
+      onSubmit={form.handleSubmit(onSubmit)}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+      }}
+    >
+      <Controller
+        name="bio"
+        control={form.control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            margin="normal"
+            label="Bio"
+            multiline
+            rows={4}
+            fullWidth
+            inputProps={{
+              maxLength: 160,
+            }}
+            error={!!form.formState.errors.bio}
+            helperText={
+              form.formState.errors.bio ? form.formState.errors.bio.message : ""
+            }
+            onChange={(e) => {
+              field.onChange(e);
+              setShow(true);
+            }}
+          />
+        )}
+      />
+      {show && (
+        <Box>
+          <Typography
+            variant="caption"
+            color={bioCharsLeft == 0 ? "#f44336" : "gray"}
+          >
+            {bioCharsLeft} / 160
+          </Typography>
+        </Box>
+      )}
+      <Controller
+        name="location"
+        control={form.control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            margin="normal"
+            label="Location"
+            fullWidth
+            error={!!form.formState.errors.location}
+            helperText={
+              form.formState.errors.location
+                ? form.formState.errors.location.message
+                : ""
+            }
+            onChange={(e) => {
+              field.onChange(e);
+              setShow(true);
+            }}
+          />
+        )}
+      />
+      <Controller
+        name="website"
+        control={form.control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            margin="normal"
+            label="Website"
+            fullWidth
+            error={!!form.formState.errors.website}
+            helperText={
+              form.formState.errors.website
+                ? form.formState.errors.website.message
+                : ""
+            }
+            onChange={(e) => {
+              field.onChange(e);
+              setShow(true);
+            }}
+          />
+        )}
+      />
+      <SaveButton show={show} handleCancle={handleCancle} />
+    </Box>
+  );
+}
