@@ -16,6 +16,7 @@ export default function UserAvatar({ name, image, size }: IUserAvatar) {
         width: avatarSize,
         height: avatarSize,
         fontSize: avatarFontSize,
+        mr: 1,
       }}
       alt={name || undefined}
       src={image || undefined}

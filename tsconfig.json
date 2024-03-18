@@ -7,11 +7,15 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
+    "declaration": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "noEmitOnError": true,
     "plugins": [
       {
         "name": "next"

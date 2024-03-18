@@ -72,20 +72,3 @@ export const uploadImage = async (id: string, path: string) => {
     return error;
   }
 }
-
-export const editUserProfile = async (id: string, data: any) => {
-  try {
-    return prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        profile: {
-          update: data,
-        },
-      },
-    });
-  } catch (error) {
-    return error;
-  }
-}

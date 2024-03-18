@@ -1,84 +1,42 @@
 "use client";
 
-import UserAvatar from "@/components/ui/UserAvatar";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import { useEdgeStore } from "@/lib/edgestore";
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
-import { useState, useTransition } from "react";
-import { useSession } from "next-auth/react";
+import { Container, Grid, Divider, Typography } from "@mui/material";
+import NavBar from "@/components/ui/AppBar";
+import ProfileForm from "@/components/profile/ProfileForm";
+import PersonalForm from "@/components/profile/PersonalForm";
+import Experience from "@/components/profile/ProfileExperience";
 
 export default function Page() {
-  const user = useCurrentUser();
-  const { update } = useSession();
-  const { edgestore } = useEdgeStore();
-  const [image, setImage] = useState<string | null>(user?.image || null);
-  const [isPending, startTransition] = useTransition();
-  const [progress, setProgress] = useState(0);
-
-  const onChange = async (file?: File) => {
-    if (!file) {
-      return;
-    }
-    try {
-      startTransition(async () => {
-        const res = await edgestore.publicFiles.upload({
-          file: file,
-          options: {
-            manualFileName: new Date().toISOString() + user?.id,
-          },
-          onProgressChange: (progress) => {
-            setProgress(progress);
-          },
-        });
-
-        await fetch("/api/user", {
-          method: "POST",
-          body: JSON.stringify({ image: res.url }),
-        });
-
-        update({ image: res.url });
-        setImage(res.url);
-      });
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
-
   return (
     <div>
+      <NavBar />
       <Container maxWidth="md">
-        <Grid container spacing={4} my={1}>
+        <Grid
+          container
+          spacing={4}
+          my={1}
+          sx={{
+            border: "1px solid #e0e0e0",
+          }}
+        >
           <Grid item xs={4}>
             <Typography variant="h6">About</Typography>
             <Typography variant="body1" color="gray">
               Tell us about yourself.
             </Typography>
           </Grid>
-          <Grid
-            item
-            xs={8}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <UserAvatar image={image} name={user?.name} size="small" />
-            <Button variant="outlined" disabled={isPending} component="label">
-              Upload a new picture
-              <input
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={(e) => onChange(e.target.files?.[0])}
-              />
-            </Button>
+          <Grid item xs={8}>
+            <PersonalForm />
+            <ProfileForm />
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="h6">Experience</Typography>
+            <Typography variant="body1" color="gray">
+              Add your work experience.
+            </Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <Experience />
           </Grid>
         </Grid>
       </Container>
