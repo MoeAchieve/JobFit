@@ -39,28 +39,45 @@ export const editProfileSchema = z.object({
   website: z.optional(z.string()),
 });
 
-export const addExperienceSchema =
-  z.object({
-    title: z.string().min(1, {
-      message: "Title is required",
-    }),
-    company: z.string().min(1, {
-      message: "Company is required",
-    }),
-    location: z.string().min(1, {
-      message: "Location is required",
-    }),
-    from: z.optional(z.string().min(1, {
-      message: "From date is required",
-    })),
-    to: z.string().min(1, {
-      message: "To date is required",
-    }),
-    description: z.string().min(1, {
-      message: "Description is required",
-    }),
-    current: z.boolean(),
-  });
+export const addCompanySchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  description: z.string().min(1, {
+    message: "Description is required",
+  }),
+  image: z.optional(z.string().url({
+    message: "Image is required",
+  })),
+  location: z.string().min(1, {
+    message: "Location is required",
+  }),
+  website: z.optional(z.string().url({
+    message: "Website is required",
+  })),
+});
+
+export const addExperienceSchema = z.object({
+  title: z.string().min(6, {
+    message: "Title is required",
+  }),
+  company: z.string().min(3, {
+    message: "Company is required",
+  }),
+  location: z.string().min(1, {
+    message: "Location is required",
+  }),
+  from: z.string().min(1, {
+    message: "From date is required",
+  }),
+  to: z.optional(z.string().min(1, {
+    message: "To date is required",
+  })),
+  description: z.optional(z.string().min(1, {
+    message: "Description is required",
+  })),
+  current: z.optional(z.boolean()),
+});
 
 export const editExperienceSchema = z.object({
   title: z.optional(z.string().min(1, {

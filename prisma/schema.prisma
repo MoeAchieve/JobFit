@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -78,15 +79,17 @@ model Applicantion {
 }
 
 model Company {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
-  location    String
-  website     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [recruiterId], references: [id])
-  recruiterId String
+  location    String?
+  website     String?
+  image       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User?        @relation(fields: [recruiterId], references: [id])
+  recruiterId String?
   jobs        Job[]
+  Experience  Experience[]
 }
 
 model Profile {
@@ -123,15 +126,17 @@ model Language {
 }
 
 model Experience {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
-  company     String
+  company     Company   @relation(fields: [companyId], references: [id])
+  companyId   Int
   location    String
   from        DateTime
   to          DateTime
+  type        JOB_TYPE? @default(FullTime)
   current     Boolean
   description String
-  profile     Profile  @relation(fields: [profileId], references: [id])
+  profile     Profile   @relation(fields: [profileId], references: [id])
   profileId   Int
 }
 

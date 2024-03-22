@@ -5,7 +5,9 @@ import { theme } from "@/lib/theme";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { EdgeStoreProvider } from "@/lib/edgestore";
-import NavBar from "@/components/ui/AppBar";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import LocProvider from "@/LocProvider";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -20,16 +22,16 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
-      <html lang="en">
+      <SessionProvider session={session}>
+        <html lang="en">
         <EdgeStoreProvider>
-          <ThemeProvider theme={theme}>
-            <body>
-              {children}
-            </body>
-          </ThemeProvider>
-        </EdgeStoreProvider>
-      </html>
-    </SessionProvider>
+          <LocProvider>
+            <ThemeProvider theme={theme}>
+              <body>{children}</body>
+            </ThemeProvider>
+          </LocProvider>
+          </EdgeStoreProvider>
+        </html>
+      </SessionProvider>
   );
 }

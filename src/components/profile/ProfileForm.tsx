@@ -3,57 +3,42 @@
 import { editProfileSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { MouseEvent } from "react";
 import SaveButton from "../ui/SaveButton";
-import { useCurrentUser } from "@/hooks/use-current-user";
 
-export default function ProfileForm() {
-  const user = useCurrentUser();
-  const [data, setData] = useState({ bio: "", location: "", website: "" });
+type ProfileFormProps = {
+  bio: string;
+  location: string;
+  website: string;
+};
+
+export default function ProfileForm({ bio, location, website }: ProfileFormProps) {
   const [show, setShow] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      bio: data.bio,
-      location: data.location,
-      website: data.website,
+      bio: bio,
+      location: location,
+      website: website,
     },
   });
 
   const handleCancle = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     form.reset({
-      bio: data.bio,
-      location: data.location,
-      website: data.website,
+      bio: bio,
+      location: location,
+      website: website,
     });
     setShow(false);
   };
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const res = await fetch(`/api/profile/${user?.id}`);
-      const json = await res.json();
-      setData(json.profile);
-    };
-
-    fetchProfile();
-  }, []);
-
   const { watch } = form;
-  const bio = watch("bio") || "";
-  const bioCharsLeft = 160 - bio.length;
-
-  useEffect(() => {
-    form.reset({
-      bio: data.bio,
-      location: data.location,
-      website: data.website,
-    });
-  }, [data, form]);
+  const wbio = watch("bio") || "";
+  const bioCharsLeft = 160 - wbio.length;
 
   const onSubmit = async (values: any) => {
     const { bio, location, website } = values;
@@ -147,10 +132,6 @@ export default function ProfileForm() {
                 ? form.formState.errors.website.message
                 : ""
             }
-            onChange={(e) => {
-              field.onChange(e);
-              setShow(true);
-            }}
           />
         )}
       />
