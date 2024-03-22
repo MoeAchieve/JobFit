@@ -6,6 +6,12 @@ import Experience from "@/components/profile/ProfileExperience";
 import { currentUser } from "@/lib/auth";
 import { getProfileById } from "@/lib/actions/profile";
 import { IProfile } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Profile",
+  description: "Edit your JobFit profile.",
+};
 
 export default async function Page() {
   const user = await currentUser();
@@ -15,7 +21,7 @@ export default async function Page() {
     return null;
   }
 
-  const profile: IProfile = await getProfileById(user?.id);
+  const profile: IProfile = await getProfileById(user.id!);
 
   return (
     <div>
@@ -37,7 +43,11 @@ export default async function Page() {
           </Grid>
           <Grid item xs={8} p={3}>
             <PersonalForm />
-            <ProfileForm bio={profile.bio} location={profile.location} website={profile.website} />
+            <ProfileForm
+              bio={profile.bio}
+              location={profile.location}
+              website={profile.website}
+            />
           </Grid>
           <Grid item xs={4}>
             <Typography variant="h6">Experience</Typography>
