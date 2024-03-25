@@ -5,13 +5,13 @@ import { theme } from "@/lib/theme";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { EdgeStoreProvider } from "@/lib/edgestore";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import LocProvider from "@/LocProvider";
+import ToasterContainer from "@/components/ToasterContainer";
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Home | JobFit",
   description: "Welcome to JobFit - the best place to find your next job!",
+  icons: ["/images/logoico.ico"],
 };
 
 export default async function RootLayout({
@@ -22,16 +22,19 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-      <SessionProvider session={session}>
-        <html lang="en">
+    <SessionProvider session={session}>
+      <html lang="en">
         <EdgeStoreProvider>
           <LocProvider>
             <ThemeProvider theme={theme}>
-              <body>{children}</body>
+              <body>
+                {children}
+                <ToasterContainer />
+              </body>
             </ThemeProvider>
           </LocProvider>
-          </EdgeStoreProvider>
-        </html>
-      </SessionProvider>
+        </EdgeStoreProvider>
+      </html>
+    </SessionProvider>
   );
 }
