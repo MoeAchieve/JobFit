@@ -8,6 +8,8 @@ export interface IExperience {
   to: string;
   image: string;
   length?: string;
+  location: string;
+  current: boolean;
 }
 
 export interface IEducation {

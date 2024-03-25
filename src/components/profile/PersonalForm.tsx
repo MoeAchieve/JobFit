@@ -11,6 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import { changeNameSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SaveButton from "@/components/ui/SaveButton";
+import { toast } from "sonner";
 
 export default function PersonalForm() {
   const user = useCurrentUser();
@@ -34,14 +35,23 @@ export default function PersonalForm() {
     }
     startTransition(async () => {
       try {
-        await fetch("/api/user", {
-          method: "PUT",
+        setShow(false);
+        const res = await fetch("/api/user", {
+          method: "PATCH",
           body: JSON.stringify({ name }),
         });
-        setShow(false);
+
+        const data = await res.json();
+
+        if (!data.success) {
+          toast.error("Something went wrong");
+          return;
+        }
+
+        toast.success("Updated successfully");
         update({ name });
       } catch (error) {
-        console.error("Error updating name:", error);
+        toast.error("An error occurred while updating the name");
       }
     });
   };
@@ -62,16 +72,21 @@ export default function PersonalForm() {
           file: file,
         });
 
-        await fetch("/api/user/image", {
+        const img = await fetch("/api/user/image", {
           method: "POST",
           body: JSON.stringify({ image: res.url }),
         });
-
+        const data = await img.json();
+        if (!data.success) {
+          toast.error("Error updating image");
+          return;
+        }
         update({ image: res.url });
         setImage(res.url);
+        toast.success("Image updated successfully");
       });
     } catch (error) {
-      console.error("Error uploading image:", error);
+      toast.error("Error uploading image:");
     }
   };
 

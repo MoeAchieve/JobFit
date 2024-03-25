@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ["@mui/material", "@mui/lab", "@mui/icons-material"],
+  compiler: {
+    styledComponents: true,
+  },
   async rewrites() {
     return [
       {

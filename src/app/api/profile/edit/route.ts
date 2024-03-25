@@ -16,9 +16,8 @@ export async function PUT(req: NextRequest) {
   }
 
   const { bio, location, website } = validated.data;
-  console.log(bio, location, website);
 
-  const profile = await editProfile(user.id, { bio, location, website });
+  const profile = await editProfile(user.id!!, { bio, location, website });
   if (!profile) {
     return NextResponse.json({ error: "Failed to update profile" }, { status: 500 });
   }

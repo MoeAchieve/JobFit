@@ -1,4 +1,4 @@
-import { addProfileExperience } from "@/lib/actions/profile";
+import { addExperience } from "@/lib/actions/profile";
 import { currentUser } from "@/lib/auth";
 import { addExperienceSchema } from "@/lib/schemas";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,13 +12,12 @@ export async function POST(
   }
 
   const body = await req.json();
-  console.log(body);
   const validated = addExperienceSchema.safeParse(body);
   if (!validated.success) {
     return NextResponse.json({ error: validated.error.errors }, { status: 400 });
   }
 
-  const experience = await addProfileExperience(user.id, validated.data);
+  const experience = await addExperience(user.id!, validated.data);
   if (!experience) {
     return NextResponse.json({ error: "Something Went Wrong!" }, { status: 404 });
   }

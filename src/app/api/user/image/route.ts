@@ -25,5 +25,5 @@ export async function POST(req: NextRequest, _res: NextResponse) {
       image: image,
     }
   });
-  return NextResponse.json({ file: file });
+  return NextResponse.json({ success: true, image: file }, { status: 200 });
 }

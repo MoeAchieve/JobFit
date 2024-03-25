@@ -25,15 +25,15 @@ export async function getProfileById(id: string): Promise<IProfile> {
       website: profile?.website || "",
       experiences: profile?.experiences.map((experience: any) => ({
         ...experience,
-        from: experience.from.toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
-        to: experience.to.toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+        from: experience.from.toISOString(),
+        to: experience.to.toISOString(),
         company: experience.company,
         length: experienceLength(experience.to.toString(), experience.from.toString()),
       })) || [],
       educations: profile?.educations.map((education: any) => ({
         ...education,
-        from: education.from.toString(),
-        to: education.to.toString(),
+        from: education.from.toISOString(),
+        to: education.to.toISOString(),
       })) || [],
       skills: profile?.skills.map((skill: any) => ({
         ...skill,
@@ -61,7 +61,7 @@ export const editProfile = async (id: string, data: any) => {
   }
 }
 
-export const addProfileExperience = async (id: string, data: any) => {
+export const addExperience = async (id: string, data: any) => {
   try {
     const company = await prisma.company.findFirst({
       where: {
@@ -81,7 +81,7 @@ export const addProfileExperience = async (id: string, data: any) => {
           profile: {
             connect: {
               userId: id,
-            },      
+            },
           },
         },
       });
@@ -107,6 +107,72 @@ export const addProfileExperience = async (id: string, data: any) => {
   }
 }
 
+export const updateExperience = async (id: number, data: any) => {
+  try {
+    const company = await prisma.company.findFirst({
+      where: {
+        name: data.company,
+      },
+    });
+
+    if (!company) {
+      return prisma.experience.update({
+        where: {
+          id,
+        },
+        data: {
+          ...data,
+          company: {
+            create: {
+              name: data.company,
+            },
+          },
+        },
+      });
+    }
+
+    return prisma.experience.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+        company: {
+          connect: {
+            id: company.id,
+          },
+        },
+      }
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
+export const removeExperience = async (id: number) => {
+  try {
+    return prisma.experience.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
+export const getExperienceById = async (id: number) => {
+  try {
+    return prisma.experience.findUnique({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
 const experienceLength = (to: string, from: string) => {
   const toDate = new Date(to);
   const fromDate = new Date(from);
@@ -114,7 +180,7 @@ const experienceLength = (to: string, from: string) => {
   const months = Math.floor(diff / (1000 * 3600 * 24 * 30));
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
-  
+
   if (years === 0) {
     return `${remainingMonths}m`;
   } else {

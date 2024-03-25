@@ -1,6 +1,8 @@
 import { IExperience } from "@/types";
 import { Box, Card, Typography } from "@mui/material";
 import Image from "next/image";
+import ExperienceMenu from "./ExperienceMenu";
+import dayjs from "dayjs";
 
 interface ExperienceProps {
   exp: IExperience;
@@ -18,6 +20,7 @@ export default function Experience({ exp }: ExperienceProps) {
         display: "flex",
         border: "1px solid #e0e0e0",
         width: "100%",
+        position: "relative",
       }}
     >
       <Image
@@ -39,10 +42,11 @@ export default function Experience({ exp }: ExperienceProps) {
           {company.name} · {type}
         </Typography>
         <Typography variant="body2">
-          {from} - {to} · {length}
+          {dayjs(from).format("MMMM YYYY")} to {dayjs(to).format("MMMM YYYY")}
         </Typography>
         <Typography variant="body2">{description}</Typography>
       </Box>
+      <ExperienceMenu exp={exp} />
     </Card>
   );
 }
