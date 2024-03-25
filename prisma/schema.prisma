@@ -113,8 +113,6 @@ model Skill {
   id       Int       @id @default(autoincrement())
   name     String
   profiles Profile[]
-
-  @@unique([name])
 }
 
 model Language {
