@@ -39,6 +39,14 @@ export const {
         data: { emailVerified: new Date() },
       })
     },
+    async createUser({ user }) {
+      await prisma.profile.create({
+      data: {
+        userId: user.id,
+      },
+      })
+      console.log("User Created", user);
+    },
   },
   adapter: PrismaAdapter(prisma) as any,
   callbacks: {
