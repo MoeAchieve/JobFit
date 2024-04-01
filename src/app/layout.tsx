@@ -7,6 +7,7 @@ import { auth } from "@/auth";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import LocProvider from "@/LocProvider";
 import ToasterContainer from "@/components/ToasterContainer";
+import Footer from "@/components/ui/Footer";
 
 export const metadata: Metadata = {
   title: "Home | JobFit",
@@ -29,6 +30,7 @@ export default async function RootLayout({
             <ThemeProvider theme={theme}>
               <body>
                 {children}
+                <Footer />
                 <ToasterContainer />
               </body>
             </ThemeProvider>
