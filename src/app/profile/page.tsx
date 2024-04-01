@@ -7,6 +7,7 @@ import { currentUser } from "@/lib/auth";
 import { getProfileById } from "@/lib/actions/profile";
 import { IProfile } from "@/types";
 import { Metadata } from "next";
+import Skills from "@/components/profile/Skills";
 
 export const metadata: Metadata = {
   title: "Edit Profile",
@@ -57,6 +58,15 @@ export default async function Page() {
           </Grid>
           <Grid item xs={8} p={3}>
             <Experience exp={profile.experiences} />
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="h6">Skills</Typography>
+            <Typography variant="body1" color="gray">
+              Add your skills.
+            </Typography>
+          </Grid>
+          <Grid item xs={8} p={3}>
+            <Skills skills={profile.skills} />
           </Grid>
         </Grid>
       </Container>

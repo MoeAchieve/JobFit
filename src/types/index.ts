@@ -21,10 +21,12 @@ export interface IEducation {
 }
 
 export interface ISkill {
+  id: string;
   name: string;
 }
 
 export interface ILanguage {
+  id: string;
   language: string;
 }
 

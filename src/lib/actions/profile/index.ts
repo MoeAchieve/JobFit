@@ -173,6 +173,60 @@ export const getExperienceById = async (id: number) => {
   }
 }
 
+export const getProfileSkills = async (id: string) => {
+  try {
+    return prisma.profile.findUnique({
+      where: {
+        userId: id,
+      },
+      include: {
+        skills: true,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
+export const addProfileSkill = async (id: string, skillId: number) => {
+  try {
+    return prisma.profile.update({
+      where: {
+        userId: id,
+      },
+      data: {
+        skills: {
+          connect: {
+            id: skillId,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
+export const removeProfileSkill = async (id: string, skillId: number) => {
+  try {
+    return prisma.profile.update({
+      where: {
+        userId: id,
+      },
+      data: {
+        skills: {
+          disconnect: {
+            id: skillId,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+}
+
+
 const experienceLength = (to: string, from: string) => {
   const toDate = new Date(to);
   const fromDate = new Date(from);
