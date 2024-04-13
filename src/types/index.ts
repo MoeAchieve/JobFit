@@ -1,3 +1,5 @@
+import { JOB_STATUS, JOB_TYPE } from "@prisma/client";
+
 export interface IExperience {
   id: string;
   company: ICompany;
@@ -47,4 +49,38 @@ export interface ICompany {
   website: string;
   description: string;
   image: string;
+}
+
+export interface IJob {
+  id: string;
+  title: string;
+  description: string;
+  company: ICompany;
+  location: string;
+  userId: string;
+  status: JOB_STATUS;
+  applicants: IApplication[];
+  type: string;
+  image: string;
+  // createdAt: string;
+  // updatedAt: string;
+}
+
+export interface IApplication {
+  id: string;
+  jobId: string;
+  userId: string;
+  status: JOB_STATUS;
+  resume: string;
+  coverLetter: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface JobsQuery {
+  location?: string[];
+  type?: JOB_TYPE[];
+  sort?: -1 | 1;
+  limit?: number;
+  page?: number;
 }

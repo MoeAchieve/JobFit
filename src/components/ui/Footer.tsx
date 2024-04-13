@@ -22,7 +22,6 @@ export default function Footer() {
         p: 4,
         color: "white",
         backgroundColor: "secondary.main",
-        minHeight: "100vh",
       }}
       component="footer"
     >

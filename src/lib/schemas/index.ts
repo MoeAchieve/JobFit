@@ -100,3 +100,24 @@ export const editExperienceSchema = z.object({
   })),
   current: z.optional(z.boolean()),
 });
+
+export const createJobSchema = z.object({
+  title: z.string().min(1, {
+    message: "Title is required",
+  }),
+  description: z.string().min(1, {
+    message: "Description is required",
+  }),
+  location: z.string().min(1, {
+    message: "Location is required",
+  }),
+  type: z.string().min(1, {
+    message: "Type is required",
+  }),
+  experience: z.string().min(1, {
+    message: "Experience is required",
+  }),
+  image: z.optional(z.string().url({
+    message: "Image is required",
+  })),
+});

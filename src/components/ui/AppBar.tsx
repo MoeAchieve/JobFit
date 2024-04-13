@@ -158,6 +158,7 @@ export default function NavBar() {
   return (
     <AppBar
       position="static"
+      square
       sx={{ backgroundColor: "white", boxShadow: "none" }}
     >
       <Container maxWidth="xl">

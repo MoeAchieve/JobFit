@@ -26,7 +26,6 @@ export default async function Page() {
 
   return (
     <div>
-      <NavBar />
       <Container maxWidth="md">
         <Grid
           container

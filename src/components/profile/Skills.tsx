@@ -18,7 +18,6 @@ export default function Skills({ skills }: SkillsProps) {
     const fetchSkills = async () => {
       const res = await fetch(`/api/skills`);
       const data = await res.json();
-      console.log(data);
       setOptions(data);
     };
 

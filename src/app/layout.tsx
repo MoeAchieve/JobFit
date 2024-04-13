@@ -30,7 +30,6 @@ export default async function RootLayout({
             <ThemeProvider theme={theme}>
               <body>
                 {children}
-                <Footer />
                 <ToasterContainer />
               </body>
             </ThemeProvider>

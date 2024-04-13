@@ -13,7 +13,7 @@ export async function POST(
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  console.log(id);
+  
   const skill = await addProfileSkill(user.id!, parseInt(id));
   if (!skill) {
     return NextResponse.json({ error: "Something Went Wrong!" }, { status: 400 });
