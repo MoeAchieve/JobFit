@@ -78,9 +78,7 @@ export interface IApplication {
 }
 
 export interface JobsQuery {
-  location?: string[];
-  type?: JOB_TYPE[];
-  sort?: -1 | 1;
-  limit?: number;
-  page?: number;
+  location?: string;
+  type?: JOB_TYPE;
+  status?: JOB_STATUS;
 }

@@ -114,10 +114,23 @@ export const createJobSchema = z.object({
   type: z.string().min(1, {
     message: "Type is required",
   }),
-  experience: z.string().min(1, {
-    message: "Experience is required",
-  }),
-  image: z.optional(z.string().url({
-    message: "Image is required",
+  company: z.number().int(),
+});
+
+export const editJobSchema = z.object({
+  title: z.optional(z.string().min(1, {
+    message: "Title is required",
+  })),
+  description: z.optional(z.string().min(1, {
+    message: "Description is required",
+  })),
+  location: z.optional(z.string().min(1, {
+    message: "Location is required",
+  })),
+  type: z.optional(z.string().min(1, {
+    message: "Type is required",
+  })),
+  status: z.optional(z.string().min(1, {
+    message: "Status is required",
   })),
 });
