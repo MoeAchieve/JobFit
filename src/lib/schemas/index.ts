@@ -134,3 +134,39 @@ export const editJobSchema = z.object({
     message: "Status is required",
   })),
 });
+
+export const createCompanySchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  description: z.string().min(1, {
+    message: "Description is required",
+  }),
+  location: z.string().min(1, {
+    message: "Location is required",
+  }),
+  website: z.optional(z.string().url({
+    message: "Website is required",
+  })),
+  image: z.optional(z.string().url({
+    message: "Image is required",
+  })),
+});
+
+export const editCompanySchema = z.object({
+  name: z.optional(z.string().min(1, {
+    message: "Name is required",
+  })),
+  description: z.optional(z.string().min(1, {
+    message: "Description is required",
+  })),
+  location: z.optional(z.string().min(1, {
+    message: "Location is required",
+  })),
+  website: z.optional(z.string().url({
+    message: "Website is required",
+  })),
+  image: z.optional(z.string().url({
+    message: "Image is required",
+  })),
+});
