@@ -112,3 +112,71 @@ export async function deleteJob(id: number) {
     return error;
   }
 }
+
+export async function getPostedJobs(userId: string) {
+  try {
+    const jobs = await prisma.job.findMany({
+      where: {
+        userId
+      }
+    });
+    return jobs;
+  }
+  catch (error) {
+    return error;
+  }
+}
+
+export async function getUserApplications(userId: string) {
+  try {
+    const applications = await prisma.applicantion.findMany({
+      where: {
+        userId
+      }
+    });
+    return applications;
+  }
+  catch (error) {
+    return error;
+  }
+}
+
+export async function createJobApplication(userId: string, jobId: number, data: any) {
+  try {
+    const application = await prisma.applicantion.create({
+      data: {
+        ...data,
+        user: {
+          connect: {
+            id: userId
+          }
+        },
+        job: {
+          connect: {
+            id: jobId
+          }
+        },
+        status: "PENDING",
+      }
+    });
+    return application;
+  }
+  catch (error) {
+    return error;
+  }
+}
+
+export async function getJobApplications(jobId: number, userId: string) {
+  try {
+    const applications = await prisma.applicantion.findMany({
+      where: {
+        jobId,
+        userId
+      }
+    });
+    return applications;
+  }
+  catch (error) {
+    return error;
+  }
+}

@@ -170,3 +170,12 @@ export const editCompanySchema = z.object({
     message: "Image is required",
   })),
 });
+
+export const applicationSchema = z.object({
+  coverLetter: z.optional(z.string().min(1, {
+    message: "Cover Letter is required",
+  })),
+  resume: z.string().url().min(1, {
+    message: "Resume is required",
+  }),
+});
