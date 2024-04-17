@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const skills = require("./seeds/skills.json");
+const bcrypt = require("bcryptjs");
 
 async function main() {
   await prisma.skill.deleteMany();
@@ -13,6 +14,20 @@ async function main() {
     data: skills,
   });
   console.log("Seeded skills table");
+
+  const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+  await prisma.user.create({
+    data: {
+      email: process.env.ADMIN_EMAIL,
+      name: process.env.ADMIN_NAME,
+      password: hashedPassword,
+      role: "ADMIN",
+      profile: {
+        create: {}
+      },
+    },
+  })
+  console.log("Initial admin created");
 }
 
 main()
