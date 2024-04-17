@@ -1,4 +1,5 @@
 import { deleteJob, getJobById, updateJob } from "@/lib/actions/jobs";
+import { currentUser } from "@/lib/auth";
 import { editJobSchema } from "@/lib/schemas";
 import { NextResponse } from "next/server";
 
@@ -25,10 +26,14 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id);
+    const user = await currentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const jobId = parseInt(params.id);
     const body = await req.json();
 
-    const job = await getJobById(id);
+    const job = await getJobById(jobId);
     if (!job) {
       return NextResponse.json({ error: "Job not found" }, { status: 404 });
     }
@@ -38,7 +43,7 @@ export async function PUT(
       return NextResponse.json({ error: validated.error.errors }, { status: 400 });
     }
 
-    await updateJob(id, validated);
+    await updateJob(user.id, jobId, validated);
 
     return NextResponse.json({ status: 204 });
   } catch (error) {

@@ -1,4 +1,5 @@
 import { prisma } from "@/config/prisma";
+import { HttpError } from "@/errors";
 import { JobsQuery } from "@/types";
 
 export async function getAllJobs(query: JobsQuery, skip: number, take: number) {
@@ -79,17 +80,18 @@ export async function createJob(data: any, userId: string) {
   }
 }
 
-export async function updateJob(id: number, data: any) {
+export async function updateJob(userId: string, id: number, data: any) {
   try {
     const job = await prisma.job.update({
       where: {
-        id
+        id,
+        userId
       },
       data
     });
 
     if (!job) {
-      return null;
+      throw new HttpError("Unauthorized", 401);
     }
 
     return job;

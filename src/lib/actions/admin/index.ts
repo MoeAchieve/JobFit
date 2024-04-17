@@ -1,5 +1,6 @@
 import { prisma } from '@/config/prisma';
 import { HttpError } from '@/errors';
+import { JOB_STATUS } from '@prisma/client';
 
 export async function makeAdmin(id: string) {
   try {
@@ -85,6 +86,30 @@ export async function unbanUser(id: string) {
       },
     });
     return user;
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function updateJobStatus(id: number, status: string) {
+  try {
+    const job = await prisma.job.findUnique({
+      where: { id },
+    });
+
+    if (!job) {
+      throw new HttpError('Job not found', 404);
+    }
+
+    await prisma.job.update({
+      where: {
+        id,
+      },
+      data: {
+        status: status as JOB_STATUS,
+      },
+    });
+    return null;
   } catch (error: any) {
     throw error;
   }
