@@ -50,7 +50,7 @@ export default function SearchBar() {
         color="primary"
         sx={{ flexGrow: 0, flexShrink: 0 }}
       >
-        Search
+        search
       </Button>
     </Box>
   );
