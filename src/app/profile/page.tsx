@@ -1,5 +1,4 @@
-import { Container, Grid, Divider, Typography } from "@mui/material";
-import NavBar from "@/components/ui/AppBar";
+import { Container, Grid, Typography } from "@mui/material";
 import ProfileForm from "@/components/profile/ProfileForm";
 import PersonalForm from "@/components/profile/PersonalForm";
 import Experience from "@/components/profile/ProfileExperience";
