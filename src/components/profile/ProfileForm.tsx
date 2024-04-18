@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { MouseEvent } from "react";
 import SaveButton from "../ui/SaveButton";
+import { toast } from "sonner";
 
 type ProfileFormProps = {
   bio: string;
@@ -42,11 +43,19 @@ export default function ProfileForm({ bio, location, website }: ProfileFormProps
 
   const onSubmit = async (values: any) => {
     const { bio, location, website } = values;
-    await fetch("/api/profile/edit", {
+    const res = await fetch("/api/profile/edit", {
       method: "PUT",
       body: JSON.stringify({ bio, location, website }),
     });
+    const data = await res.json();
+    
+    if (!data.success) {
+      toast.error("Something went wrong");
+      return;
+    }
+
     setShow(false);
+    toast.success("Updated successfully");
   };
 
   return (
@@ -132,6 +141,10 @@ export default function ProfileForm({ bio, location, website }: ProfileFormProps
                 ? form.formState.errors.website.message
                 : ""
             }
+            onChange={(e) => {
+              field.onChange(e);
+              setShow(true);
+            }}
           />
         )}
       />
