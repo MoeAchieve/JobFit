@@ -23,9 +23,16 @@ export const RegisterSchema = z.object({
   path: ["cofngirmPassword"],
 });
 
-export const changeNameSchema = z.object({
+const phoneRegex = new RegExp(
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
+);
+
+export const changeUserDataSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",
+  }),
+  phone: z.string().regex(phoneRegex, {
+    message: "Phone number is invalid",
   }),
 });
 
@@ -178,4 +185,15 @@ export const applicationSchema = z.object({
   resume: z.string().url().min(1, {
     message: "Resume is required",
   }),
+});
+
+export const createAdminSchema = z.object({
+  email: z.string().email({ message: "Email is required" }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters",
+  }),
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  
 });

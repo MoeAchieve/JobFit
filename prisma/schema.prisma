@@ -16,6 +16,7 @@ model User {
   image         String?
   password      String?
   phone         String?
+  banned        Boolean        @default(false)
   role          Role           @default(STANDARD)
   accounts      Account[]
   profile       Profile?
@@ -50,12 +51,12 @@ model Job {
   location    String
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  user        User           @relation(fields: [userId], references: [id])
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   type        JOB_TYPE       @default(FullTime)
   status      JOB_STATUS     @default(Active)
   applicants  Applicantion[]
-  company     Company        @relation(fields: [companyId], references: [id])
+  company     Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId   Int
 }
 
@@ -129,15 +130,15 @@ model Language {
 model Experience {
   id          Int       @id @default(autoincrement())
   title       String
-  company     Company   @relation(fields: [companyId], references: [id])
-  companyId   Int
+  company     Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  companyId   Int?
   location    String
   from        DateTime
   to          DateTime
   type        JOB_TYPE? @default(FullTime)
   current     Boolean
   description String
-  profile     Profile   @relation(fields: [profileId], references: [id])
+  profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId   Int
 }
 

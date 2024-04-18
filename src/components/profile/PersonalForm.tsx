@@ -8,7 +8,7 @@ import { useState, useTransition, MouseEvent } from "react";
 import { useSession } from "next-auth/react";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
-import { changeNameSchema } from "@/lib/schemas";
+import { changeUserDataSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SaveButton from "@/components/ui/SaveButton";
 import { toast } from "sonner";
@@ -22,14 +22,15 @@ export default function PersonalForm() {
   const [show, setShow] = useState(false);
 
   const form = useForm({
-    resolver: zodResolver(changeNameSchema),
+    resolver: zodResolver(changeUserDataSchema),
     defaultValues: {
       name: user?.name || "",
+      phone: user?.phone || "",
     },
   });
 
-  const handleChangeName = async (values: z.infer<typeof changeNameSchema>) => {
-    const { name } = values;
+  const handleChangeName = async (values: z.infer<typeof changeUserDataSchema>) => {
+    const { name, phone } = values;
     if (!name) {
       return;
     }
@@ -38,7 +39,7 @@ export default function PersonalForm() {
         setShow(false);
         const res = await fetch("/api/user", {
           method: "PATCH",
-          body: JSON.stringify({ name }),
+          body: JSON.stringify({ name, phone }),
         });
 
         const data = await res.json();
@@ -119,6 +120,31 @@ export default function PersonalForm() {
               helperText={
                 form.formState.errors.name
                   ? form.formState.errors.name.message
+                  : ""
+              }
+              onChange={(e) => {
+                field.onChange(e);
+                setShow(true);
+              }}
+            />
+          )}
+        />
+        <Controller
+          name="phone"
+          control={form.control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              margin="normal"
+              required
+              id="phone"
+              label="Phone"
+              size="small"
+              disabled={isPending}
+              error={!!form.formState.errors.phone}
+              helperText={
+                form.formState.errors.phone
+                  ? form.formState.errors.phone.message
                   : ""
               }
               onChange={(e) => {

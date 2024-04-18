@@ -1,7 +1,17 @@
 import { update } from '@/auth';
-import { updateUser } from '@/lib/actions/user';
+import { getUserById, updateUser } from '@/lib/actions/user';
 import { currentUser } from '@/lib/auth';
+import { changeUserDataSchema } from '@/lib/schemas';
 import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(req: NextRequest, res: NextResponse) {
+  const u = await currentUser();
+  if (!u) {
+    return NextResponse.json({ error: "Not logged in" }, { status: 401 });
+  }
+  const user = await getUserById(u.id);
+  return NextResponse.json({ user }, { status: 200 });
+}
 
 export async function PATCH(req: NextRequest, res: NextResponse) {
   const user = await currentUser();
@@ -9,12 +19,14 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ error: "Not logged in" }, { status: 401 });
   }
 
-  const { name } = await req.json();
-  if (!name) {
-    return NextResponse.json({ error: "Name or email are required" }, { status: 400 });
+  const body = await req.json();
+  const validated = await changeUserDataSchema.safeParseAsync(body);
+
+  if (!validated.success) {
+    return NextResponse.json({ error: validated.error }, { status: 400 });
   }
 
-  const updated = await updateUser(user.id, { name });
+  const updated = await updateUser(user.id, validated.data);
   if (!updated) {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
@@ -22,7 +34,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
   await update({
     user: {
       ...user,
-      name,
+      ...validated.data,
     }
   });
   return NextResponse.json({ success: true }, { status: 200 });

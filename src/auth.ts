@@ -18,6 +18,7 @@ import { getUserById } from "./lib/actions/user";
 declare module "next-auth" {
   interface User {
     role: Role
+    phone: string;
   }
 }
 
@@ -45,7 +46,6 @@ export const {
         userId: user.id,
       },
       })
-      console.log("User Created", user);
     },
   },
   adapter: PrismaAdapter(prisma) as any,
@@ -58,6 +58,7 @@ export const {
       token.name = user.name;
       token.email = user.email;
       token.image = user.image;
+      token.phone = user.phone;
       return token;
     },
     async session({ token, session }) {
@@ -73,6 +74,7 @@ export const {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.image as string;
+        session.user.phone = token.phone as string;
       }
       return session;
     },
