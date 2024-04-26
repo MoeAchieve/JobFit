@@ -8,25 +8,25 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(
   req: NextRequest,
 ) {
-  const params = req.nextUrl.searchParams;
-  const location = params.get("location");
-  const type = params.get("type") as JOB_TYPE;
-  const status = params.get("status") as JOB_STATUS;
-  const skip = params.get("skip") ? parseInt(params.get("skip") as string) : 0;
-  const take = params.get("take") ? parseInt(params.get("take") as string) : 10;
-
-  const query: JobsQuery = {
-    location: location ?? undefined,
-    type: type ? type : "FullTime",
-    status: status ? status : "Active"
-  };
+  try {
+    const params = req.nextUrl.searchParams;
+    const location = params.get("location");
+    const type = params.get("type")?.split(",") as JOB_TYPE[] | undefined;
+    const status = params.get("status")?.split(",") as JOB_STATUS[] | undefined;
+    const skip = params.get("skip") ? parseInt(params.get("skip") as string) : 0;
+    const limit = params.get("limit") ? parseInt(params.get("limit") as string) : 10;
   
-  const jobs = await getAllJobs(query, skip, take);
-  if (!jobs) {
+    const query: JobsQuery = {
+      location: location?.split(",") ?? undefined,
+      type: type ?? ["FullTime"],
+      status: status ?? ["Active"]
+    };
+
+    const jobs = await getAllJobs(query, skip, limit);
+    return NextResponse.json(jobs, { status: 200 });
+  } catch (error) {
     return NextResponse.json({ error: "Failed fetching jobs" }, { status: 500 });
   }
-
-  return NextResponse.json(jobs, { status: 200 });
 }
 
 export async function POST(

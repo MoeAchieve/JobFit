@@ -28,15 +28,26 @@ export async function getAllJobs(query: JobsQuery, skip: number, take: number) {
   try {
     const jobs = await prisma.job.findMany({
       where: {
-        ...queryOptions
+        location: {
+          in: query.location
+        },
+        type: {
+          in: query.type
+        },
+        status: {
+          in: query.status
+        }
       },
       skip,
       take,
+      include: {
+        company: true,
+      }
     });
-    
     return jobs;
   }
   catch (error) {
+    console.log(error);
     return error;
   }
 }
