@@ -1,39 +1,15 @@
 "use client";
 
 import {
-  Autocomplete,
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
-  Modal,
-  TextField,
   Typography,
 } from "@mui/material";
-import { startTransition, useEffect, useState } from "react";
+import { useState } from "react";
 import Experience from "./Experience";
-import { Controller, useForm } from "react-hook-form";
-import { addExperienceSchema } from "@/lib/schemas";
-import { ICompany, IExperience } from "@/types";
-import { z } from "zod";
-import { DatePicker } from "@mui/x-date-pickers";
+import { IExperience } from "@/types";
 import dayjs from "dayjs";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import ExperienceModal from "./ExperienceForm";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  border: "1px solid #eee",
-  p: 4,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-};
 
 interface ExperienceProps {
   exp?: IExperience[];

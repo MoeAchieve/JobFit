@@ -9,8 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Button } from "@mui/material";
-// import LongMenu from "./Menu";
 import Image from "next/image";
+import ApplyModal from "./ApplyModal";
+import { useState } from "react";
 
 interface Props {
   job: IJob;
@@ -19,6 +20,10 @@ interface Props {
 export default function Job({
   job
 }: Props) {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Card
       variant="outlined"
@@ -71,10 +76,11 @@ export default function Job({
           py: 1,
           fontWeight: 600
         }}
+        onClick={handleOpen}
       >
         Apply
       </Button>
-      {/* <LongMenu /> */}
+      <ApplyModal open={open} handleClose={handleClose} jobId={job.id} />
     </Card>
   );
 }

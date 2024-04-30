@@ -1,6 +1,6 @@
+import { HttpError } from "@/errors";
 import { createJobApplication, getJobApplications } from "@/lib/actions/jobs";
 import { currentUser } from "@/lib/auth";
-import { applicationSchema } from "@/lib/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -16,13 +16,11 @@ export async function GET(
 
     const jobId = parseInt(params.id);
     const applicantions = await getJobApplications(jobId, user.id);
-
     return NextResponse.json(applicantions, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed updating job" }, { status: 500 });
+    return NextResponse.json({ error: "Process failed" }, { status: 500 });
   }
 }
-
 
 export async function POST(
   req: NextRequest,
@@ -37,14 +35,16 @@ export async function POST(
     const body = await req.json();
     const jobId = parseInt(params.id);
 
-    const validated = applicationSchema.safeParse(body);
-    if (!validated.success) {
-      return NextResponse.json({ error: validated.error.errors }, { status: 400 });
+   await createJobApplication(user.id, jobId, body);
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+      if (error instanceof HttpError) {
+        return NextResponse.json({
+          error: error.message,
+        }, { status: error.statusCode });
+      }
+      return NextResponse.json({
+        error: error,
+      }, { status: 500 });
     }
-
-    const applicantion = await createJobApplication(user.id, jobId, validated);
-    return NextResponse.json(applicantion, { status: 204 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed updating job" }, { status: 500 });
   }
-}

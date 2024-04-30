@@ -156,6 +156,18 @@ export async function getUserApplications(userId: string) {
 
 export async function createJobApplication(userId: string, jobId: number, data: any) {
   try {
+    const hasUserApplied = await prisma.applicantion.findFirst({
+      where: {
+        userId,
+        jobId
+      }
+    });
+
+    if (hasUserApplied) {
+      throw new HttpError("User has already applied for this job", 400);
+    }
+    console.log(data);
+
     const application = await prisma.applicantion.create({
       data: {
         ...data,
@@ -172,10 +184,14 @@ export async function createJobApplication(userId: string, jobId: number, data: 
         status: "PENDING",
       }
     });
+
+    if (!application) {
+      throw new HttpError("Failed to apply for job", 500);
+    }
     return application;
   }
   catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -190,6 +206,6 @@ export async function getJobApplications(jobId: number, userId: string) {
     return applications;
   }
   catch (error) {
-    return error;
+    throw error;
   }
 }

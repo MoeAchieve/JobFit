@@ -40,6 +40,7 @@ export interface IProfile {
   educations: IEducation[];
   skills: ISkill[];
   languages: ILanguage[];
+  resume: string;
 }
 
 export interface ICompany {

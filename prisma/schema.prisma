@@ -99,6 +99,7 @@ model Profile {
   bio         String?
   location    String?
   website     String?
+  resume      String?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   skills      Skill[]

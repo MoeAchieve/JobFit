@@ -44,6 +44,7 @@ export const editProfileSchema = z.object({
     message: "Location is required",
   })),
   website: z.optional(z.string()),
+  resume: z.optional(z.string().url()),
 });
 
 export const addCompanySchema = z.object({
@@ -178,14 +179,6 @@ export const editCompanySchema = z.object({
   })),
 });
 
-export const applicationSchema = z.object({
-  coverLetter: z.optional(z.string().min(1, {
-    message: "Cover Letter is required",
-  })),
-  resume: z.string().url().min(1, {
-    message: "Resume is required",
-  }),
-});
 
 export const createAdminSchema = z.object({
   email: z.string().email({ message: "Email is required" }),
