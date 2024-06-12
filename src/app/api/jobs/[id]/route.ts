@@ -1,3 +1,4 @@
+import { HttpError } from "@/errors";
 import { deleteJob, getJobById, updateJob } from "@/lib/actions/jobs";
 import { currentUser } from "@/lib/auth";
 import { editJobSchema } from "@/lib/schemas";
@@ -32,22 +33,26 @@ export async function PUT(
     }
     const jobId = parseInt(params.id);
     const body = await req.json();
-
     const job = await getJobById(jobId);
     if (!job) {
       return NextResponse.json({ error: "Job not found" }, { status: 404 });
     }
-
     const validated = editJobSchema.safeParse(body);
     if (!validated.success) {
       return NextResponse.json({ error: validated.error.errors }, { status: 400 });
     }
-
-    await updateJob(user.id, jobId, validated);
-
-    return NextResponse.json({ status: 204 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed updating job" }, { status: 500 });
+    const updatedJob = await updateJob(user.id, jobId, validated.data);
+    return NextResponse.json({ success: true, updatedJob }, { status: 201 });
+  } catch (error: any) {
+    if (error instanceof HttpError) {
+      return NextResponse.json({
+        success: false,
+        error: error.message,
+      }, { status: error.statusCode });
+    }
+    return NextResponse.json({
+      error: error,
+    }, { status: 500 });
   }
 }
 
@@ -64,7 +69,6 @@ export async function DELETE(
     }
 
     await deleteJob(id);
-
     return NextResponse.json({ message: "Job deleted" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Failed deleting job" }, { status: 500 });

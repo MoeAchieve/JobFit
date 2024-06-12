@@ -122,7 +122,7 @@ const UserMenu = ({ anchorEl, handleClose, user }: any) => {
         <Typography textAlign="center">Logout</Typography>
       </MenuItem>
       <Divider variant="middle" />
-      <MenuItem onClick={handleClose} component={Link} href="/jobs">
+      <MenuItem onClick={handleClose} component={Link} href="/recruiter">
         <Button variant="text" fullWidth>
           Post Job
         </Button>

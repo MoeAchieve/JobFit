@@ -8,21 +8,18 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
-import { Button } from "@mui/material";
 import Image from "next/image";
-import ApplyModal from "./ApplyModal";
-import { useState } from "react";
 
 interface Props {
   job: IJob;
+  onJobClick: (jobId: string) => void;
 }
 
 export default function Job({
-  job
+  job,
+  onJobClick
 }: Props) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
 
   return (
     <Card
@@ -33,7 +30,9 @@ export default function Job({
         display: "flex",
         alignItems: "center",
         px: 1,
+        "&:hover": { cursor: "pointer", opacity: 0.9 },
       }}
+      onClick={() => onJobClick(job.id)}
     >
       <CardMedia
         sx={{
@@ -65,22 +64,6 @@ export default function Job({
           sx={{ my: 1 }}
         />
       </CardContent>
-      <Button
-        variant="contained"
-        color="primary"
-        size="large"
-        sx={{
-          ml: "auto",
-          mr: 2,
-          px: 6,
-          py: 1,
-          fontWeight: 600
-        }}
-        onClick={handleOpen}
-      >
-        Apply
-      </Button>
-      <ApplyModal open={open} handleClose={handleClose} jobId={job.id} />
     </Card>
   );
 }

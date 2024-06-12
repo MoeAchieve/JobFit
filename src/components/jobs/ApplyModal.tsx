@@ -47,8 +47,7 @@ export default function ApplyModal({
       const data = await profile.json();
       if (!data) {
         return;
-      }
-      console.log(data);
+      };
       setResume(data.profile.resume);
     };
 
@@ -57,7 +56,6 @@ export default function ApplyModal({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("submitted");
 
     if (!user) {
       return;
@@ -76,7 +74,6 @@ export default function ApplyModal({
           resume: resume,
         }),
       });
-      console.log(application);
       const data = await application.json();
       if (!data.success) {
         toast.error(data.error);

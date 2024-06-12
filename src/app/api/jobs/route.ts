@@ -2,7 +2,7 @@ import { createJob, getAllJobs } from "@/lib/actions/jobs";
 import { currentUser } from "@/lib/auth";
 import { createJobSchema } from "@/lib/schemas";
 import { JobsQuery } from "@/types";
-import { JOB_STATUS, JOB_TYPE } from "@prisma/client";
+import { Job } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -11,19 +11,26 @@ export async function GET(
   try {
     const params = req.nextUrl.searchParams;
     const location = params.get("location");
-    const type = params.get("type")?.split(",") as JOB_TYPE[] | undefined;
-    const status = params.get("status")?.split(",") as JOB_STATUS[] | undefined;
-    const skip = params.get("skip") ? parseInt(params.get("skip") as string) : 0;
+    const type = params.get("type");
+    const status = params.get("status") ? parseInt(params.get("status") as string) : 0;
     const limit = params.get("limit") ? parseInt(params.get("limit") as string) : 10;
-  
+    const page = params.get("page") ? parseInt(params.get("page") as string) : 1;
+    const keyword = params.get("keyword");
+    const recruiterId = params.get("recruiterId");
+
     const query: JobsQuery = {
       location: location?.split(",") ?? undefined,
-      type: type ?? ["FullTime"],
-      status: status ?? ["Active"]
+      type: type?.split(",") ?? undefined,
+      status: status,
+      keyword: keyword ?? undefined,
+      recruiterId: recruiterId ?? undefined,
     };
 
-    const jobs = await getAllJobs(query, skip, limit);
-    return NextResponse.json(jobs, { status: 200 });
+    const { jobs, count } = await getAllJobs(query, (page - 1) * limit, limit) as { jobs: Job[]; count: number; };
+
+    const pages = Math.ceil(count / limit);
+
+    return NextResponse.json({ success: true, jobs, count, pages }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Failed fetching jobs" }, { status: 500 });
   }

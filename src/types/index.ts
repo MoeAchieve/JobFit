@@ -63,6 +63,7 @@ export interface IJob {
   applicants: IApplication[];
   type: string;
   image: string;
+  createdAt: string;
 }
 
 export interface IApplication {
@@ -78,6 +79,8 @@ export interface IApplication {
 
 export interface JobsQuery {
   location?: string[];
-  type?: JOB_TYPE[];
-  status?: JOB_STATUS[];
+  type?: string[];
+  status?: number;
+  keyword?: string;
+  recruiterId?: string;
 }
