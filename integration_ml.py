@@ -31,7 +31,7 @@ model_title.fit(X, y_title)
 y_location = jobs_data['Location']
 model_location.fit(X, y_location)
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET'])
 def predict_job_title_and_location():
     data = request.get_json()
     skills = data['skills']
