@@ -17,6 +17,16 @@ export async function createCompany(userId: string, data: any) {
         recruiterId: userId,
       },
     });
+
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        isRecruiter: true,
+      },
+    });
+
     return company;
   } catch (error) {
     return error;

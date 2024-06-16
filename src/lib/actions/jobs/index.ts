@@ -209,7 +209,6 @@ export async function createJobApplication(userId: string, jobId: number, data: 
     if (hasUserApplied) {
       throw new HttpError("User has already applied for this job", 400);
     }
-    console.log(data);
 
     const application = await prisma.applicantion.create({
       data: {

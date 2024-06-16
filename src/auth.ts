@@ -19,6 +19,7 @@ declare module "next-auth" {
   interface User {
     role: Role
     phone: string;
+    isRecruiter: boolean;
   }
 }
 
@@ -59,6 +60,7 @@ export const {
       token.email = user.email;
       token.image = user.image;
       token.phone = user.phone;
+      token.isRecruiter = user.isRecruiter;
       return token;
     },
     async session({ token, session }) {
@@ -75,6 +77,7 @@ export const {
         session.user.email = token.email;
         session.user.image = token.image as string;
         session.user.phone = token.phone as string;
+        session.user.isRecruiter = token.isRecruiter as boolean;
       }
       return session;
     },

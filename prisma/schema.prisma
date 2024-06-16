@@ -16,6 +16,7 @@ model User {
   image         String?
   password      String?
   phone         String?
+  isRecruiter    Boolean        @default(false)
   banned        Boolean        @default(false)
   role          Role           @default(STANDARD)
   accounts      Account[]

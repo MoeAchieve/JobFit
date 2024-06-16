@@ -1,4 +1,4 @@
-import { JOB_STATUS, JOB_TYPE } from "@prisma/client";
+import { JOB_STATUS, JOB_TYPE, Status } from "@prisma/client";
 
 export interface IExperience {
   id: string;
@@ -83,4 +83,23 @@ export interface JobsQuery {
   status?: number;
   keyword?: string;
   recruiterId?: string;
+}
+
+export interface Applicant {
+  id: string;
+  status: Status;
+  createdAt: string;
+  resume: string;
+  coverLetter: string;
+  user: {
+    email: string;
+    name: string;
+    image: string;
+  };
+  job: {
+    title: string;
+    location: string;
+    status: JOB_STATUS;
+    createdAt: string;
+  };
 }

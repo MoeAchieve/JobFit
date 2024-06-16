@@ -1,14 +1,13 @@
 import { Avatar } from "@mui/material";
+
 interface IUserAvatar {
   name: string | null | undefined;
   image: string | null | undefined;
   size: "small" | "medium" | "large";
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
 export default function UserAvatar({ name, image, size }: IUserAvatar) {
-  const avatarSize = size === "small" ? 48 : size === "medium" ? 96 : 192;
+  const avatarSize = size === "small" ? 42 : size === "medium" ? 96 : 192;
   const avatarFontSize = size === "small" ? 24 : size === "medium" ? 48 : 48;
 
   return (

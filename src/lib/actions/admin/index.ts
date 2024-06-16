@@ -92,25 +92,5 @@ export async function unbanUser(id: string) {
 }
 
 export async function updateJobStatus(id: number, status: string) {
-  try {
-    const job = await prisma.job.findUnique({
-      where: { id },
-    });
-
-    if (!job) {
-      throw new HttpError('Job not found', 404);
-    }
-
-    await prisma.job.update({
-      where: {
-        id,
-      },
-      data: {
-        status: status as JOB_STATUS,
-      },
-    });
-    return null;
-  } catch (error: any) {
-    throw error;
-  }
+  
 }

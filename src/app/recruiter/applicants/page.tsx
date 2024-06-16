@@ -1,5 +1,5 @@
+import ApplicantsTable from "@/components/recruiter/Applicants";
 import CompanyForm from "@/components/recruiter/CompanyForm";
-import JobsTable from "@/components/recruiter/JobsTable";
 import NavBar from "@/components/ui/AppBar";
 import Footer from "@/components/ui/Footer";
 import { currentUser } from "@/lib/auth";
@@ -19,7 +19,7 @@ export default async function Page() {
     <>
       <NavBar />
       <Container maxWidth="lg" component="main">
-        {company.length ? <JobsTable company={company[0]} /> : <CompanyForm />}
+        {company.length ? <ApplicantsTable company={company[0]} /> : <CompanyForm />}
       </Container>
       <Footer />
     </>

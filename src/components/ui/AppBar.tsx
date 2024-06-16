@@ -72,7 +72,6 @@ const NavMenu = ({ anchorEl, handleClose, loggedIn }: any) => {
 
 const UserMenu = ({ anchorEl, handleClose, user }: any) => {
   const name = user.name.split(" ").slice(0, 2).join(" ");
-
   return (
     <Menu
       sx={{ mt: "45px" }}
@@ -122,11 +121,30 @@ const UserMenu = ({ anchorEl, handleClose, user }: any) => {
         <Typography textAlign="center">Logout</Typography>
       </MenuItem>
       <Divider variant="middle" />
-      <MenuItem onClick={handleClose} component={Link} href="/recruiter">
-        <Button variant="text" fullWidth>
-          Post Job
-        </Button>
-      </MenuItem>
+      {user.isRecruiter ? (
+        <div>
+          <MenuItem
+            onClick={handleClose}
+            component={Link}
+            href="/recruiter/joblisting"
+          >
+            Job Listings
+          </MenuItem>
+          <MenuItem
+            onClick={handleClose}
+            component={Link}
+            href="/recruiter/applicants"
+          >
+            Applicants
+          </MenuItem>
+        </div>
+      ) : (
+        <MenuItem onClick={handleClose} component={Link} href="/recruiter">
+          <Button variant="text" fullWidth>
+            Post Job
+          </Button>
+        </MenuItem>
+      )}
     </Menu>
   );
 };

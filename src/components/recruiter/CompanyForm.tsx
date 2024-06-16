@@ -64,7 +64,6 @@ export default function CompanyForm() {
           toast.success("Company created successfully");
           router.refresh();
         } else {
-          console.log(res)
           toast.error("Error creating company");
         }
       })

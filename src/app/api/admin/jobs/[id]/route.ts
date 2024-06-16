@@ -2,6 +2,7 @@ import { HttpError } from "@/errors";
 import { updateJobStatus } from "@/lib/actions/admin";
 import { currentRole } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import { prisma } from '@/config/prisma';
 
 export async function PUT(req: NextResponse,
   { params }: { params: { id: string } }) {
