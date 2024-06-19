@@ -5,8 +5,9 @@ import { useEffect, useState, useTransition } from "react";
 import Job from "./Job";
 import JobsSkeleton from "./Skeleton";
 import Paginate from "./Paginate";
-import { Grid, Typography } from "@mui/material";
+import { Chip, Grid, Typography } from "@mui/material";
 import JobDetails from "./JobDetails";
+import { toast } from "sonner";
 
 const types = [
   { label: "Full Time", value: "FullTime" },
@@ -43,9 +44,30 @@ export default function Jobs({ page = 1, limit = 10, query }: Props) {
     });
   }, [page, query]);
 
+  const handleClick = () => {
+    startTransition( async () => {
+      const res = await fetch(`/api/jobs/recommended`);
+      const data = await res.json();
+      if (!data.success) {
+        toast.error(data.message);
+        setJobs([]);
+        setPages(0);
+        return;
+      }
+      setJobs(data.jobs);
+      setPages(data.pages);
+    });
+  }
+
   return (
     <>
       <Grid item sm={12} md={4}>
+        <Chip
+          label="View Recommendations"
+          variant="outlined"
+          color="primary"
+          onClick={handleClick}
+        />
         <div>
           {isPending && <JobsSkeleton />}
           {!isPending && jobs.length === 0 && (
