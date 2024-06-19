@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flaskapp --app api/index run -p 5000",
+    "flask-prod": "pip3 install -r requirements.txt && python3 -m flaskapp --app api/index run -p 5000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
