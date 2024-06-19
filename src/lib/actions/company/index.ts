@@ -8,13 +8,16 @@ export async function getAllCompanies() {
   }
 }
 
-export async function createCompany(data: any) {
+export async function createCompany(userId: string, data: any) {
   try {
-    return prisma.company.create({
+
+    const company = await prisma.company.create({
       data: {
         ...data,
+        recruiterId: userId,
       },
     });
+    return company;
   } catch (error) {
     return error;
   }
@@ -42,6 +45,19 @@ export async function updateCompany(id: number, data: any) {
         ...data,
       },
     });
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getUserCompanies(recruiterId: string) {
+  try {
+    const companies = await prisma.company.findMany({
+      where: {
+        recruiterId,
+      }
+    })
+    return companies;
   } catch (error) {
     return error;
   }

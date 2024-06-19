@@ -23,7 +23,6 @@ export async function PUT(req: NextResponse,
     await updateJobStatus(jobId, status);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error: any) {
-    console.error(error);
     if (error instanceof HttpError) {
       return NextResponse.json({
         error: error.message,

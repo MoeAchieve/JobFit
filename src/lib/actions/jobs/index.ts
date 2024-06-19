@@ -1,40 +1,99 @@
 import { prisma } from "@/config/prisma";
 import { HttpError } from "@/errors";
 import { JobsQuery } from "@/types";
+import { JOB_STATUS, Job } from "@prisma/client";
 
 export async function getAllJobs(query: JobsQuery, skip: number, take: number) {
   let queryOptions = {};
 
   if (query.location) {
     queryOptions = {
-      location: query.location
+      location: {
+        in: query.location
+      }
     };
   }
 
   if (query.type) {
     queryOptions = {
       ...queryOptions,
-      type: query.type
-    };
+      type: {
+        in: query.type
+      }
+    }
   }
 
   if (query.status) {
+    switch (query.status) {
+      case 0:
+        queryOptions = {
+          ...queryOptions,
+          status: ["Active", "Expired", "Archived"]
+        };
+        break;
+      case 1:
+        queryOptions = {
+          ...queryOptions,
+          status: JOB_STATUS.Active
+        };
+        break;
+      case 2:
+        queryOptions = {
+          ...queryOptions,
+          status: JOB_STATUS.Archived
+        };
+        break;
+      case 3:
+        queryOptions = {
+          ...queryOptions,
+          status: JOB_STATUS.Expired
+        };
+        break;
+      default:
+        break;
+    }
+  }
+
+  if (query.keyword) {
     queryOptions = {
       ...queryOptions,
-      status: query.status
-    };
+      OR: [
+        {
+          title: {
+            contains: query.keyword
+          }
+        },
+        {
+          description: {
+            contains: query.keyword
+          }
+        }
+      ]
+    }
+  }
+
+  if (query.recruiterId) {
+    queryOptions = {
+      ...queryOptions,
+      userId: query.recruiterId,
+    }
   }
 
   try {
-    const jobs = await prisma.job.findMany({
-      where: {
-        ...queryOptions
-      },
-      skip,
-      take,
-    });
-    
-    return jobs;
+    const [jobs, count] = await prisma.$transaction([
+      prisma.job.findMany({
+        where: queryOptions,
+        skip,
+        take,
+        include: {
+          company: true,
+        }
+      }),
+      prisma.job.count({
+        where: queryOptions
+       })
+    ]);
+    return { jobs, count };
   }
   catch (error) {
     return error;
@@ -89,11 +148,6 @@ export async function updateJob(userId: string, id: number, data: any) {
       },
       data
     });
-
-    if (!job) {
-      throw new HttpError("Unauthorized", 401);
-    }
-
     return job;
   }
   catch (error) {
@@ -145,6 +199,18 @@ export async function getUserApplications(userId: string) {
 
 export async function createJobApplication(userId: string, jobId: number, data: any) {
   try {
+    const hasUserApplied = await prisma.applicantion.findFirst({
+      where: {
+        userId,
+        jobId
+      }
+    });
+
+    if (hasUserApplied) {
+      throw new HttpError("User has already applied for this job", 400);
+    }
+    console.log(data);
+
     const application = await prisma.applicantion.create({
       data: {
         ...data,
@@ -161,10 +227,14 @@ export async function createJobApplication(userId: string, jobId: number, data: 
         status: "PENDING",
       }
     });
+
+    if (!application) {
+      throw new HttpError("Failed to apply for job", 500);
+    }
     return application;
   }
   catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -179,6 +249,6 @@ export async function getJobApplications(jobId: number, userId: string) {
     return applications;
   }
   catch (error) {
-    return error;
+    throw error;
   }
 }

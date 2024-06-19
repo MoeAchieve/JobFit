@@ -40,6 +40,7 @@ export interface IProfile {
   educations: IEducation[];
   skills: ISkill[];
   languages: ILanguage[];
+  resume: string;
 }
 
 export interface ICompany {
@@ -62,8 +63,7 @@ export interface IJob {
   applicants: IApplication[];
   type: string;
   image: string;
-  // createdAt: string;
-  // updatedAt: string;
+  createdAt: string;
 }
 
 export interface IApplication {
@@ -78,7 +78,9 @@ export interface IApplication {
 }
 
 export interface JobsQuery {
-  location?: string;
-  type?: JOB_TYPE;
-  status?: JOB_STATUS;
+  location?: string[];
+  type?: string[];
+  status?: number;
+  keyword?: string;
+  recruiterId?: string;
 }

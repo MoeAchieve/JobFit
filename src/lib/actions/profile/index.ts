@@ -41,6 +41,7 @@ export async function getProfileById(id: string): Promise<IProfile> {
       languages: profile?.languages.map((language: any) => ({
         ...language,
       })) || [],
+      resume: profile?.resume || "",
     };
     return res;
   } catch (error) {

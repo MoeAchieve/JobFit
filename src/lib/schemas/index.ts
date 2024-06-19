@@ -44,6 +44,7 @@ export const editProfileSchema = z.object({
     message: "Location is required",
   })),
   website: z.optional(z.string()),
+  resume: z.optional(z.string().url()),
 });
 
 export const addCompanySchema = z.object({
@@ -121,7 +122,9 @@ export const createJobSchema = z.object({
   type: z.string().min(1, {
     message: "Type is required",
   }),
-  company: z.number().int(),
+  company: z.number().min(1, {
+    message: "Company is required",
+  }),
 });
 
 export const editJobSchema = z.object({
@@ -140,6 +143,9 @@ export const editJobSchema = z.object({
   status: z.optional(z.string().min(1, {
     message: "Status is required",
   })),
+  company: z.optional(z.number().min(1, {
+    message: "Company is required",
+  })),
 });
 
 export const createCompanySchema = z.object({
@@ -155,9 +161,10 @@ export const createCompanySchema = z.object({
   website: z.optional(z.string().url({
     message: "Website is required",
   })),
-  image: z.optional(z.string().url({
-    message: "Image is required",
-  })),
+  image: z.string().optional(),
+  founded: z.string().min(1, {
+    message: "Founded is required",
+  }),
 });
 
 export const editCompanySchema = z.object({
@@ -178,14 +185,6 @@ export const editCompanySchema = z.object({
   })),
 });
 
-export const applicationSchema = z.object({
-  coverLetter: z.optional(z.string().min(1, {
-    message: "Cover Letter is required",
-  })),
-  resume: z.string().url().min(1, {
-    message: "Resume is required",
-  }),
-});
 
 export const createAdminSchema = z.object({
   email: z.string().email({ message: "Email is required" }),
@@ -195,5 +194,5 @@ export const createAdminSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",
   }),
-  
+
 });
