@@ -18,14 +18,11 @@ import random
 
 app = Flask(__name__)
 
-# Assuming the data has already been processed and models are trained as shown previously
-
-# Load your data
 file_path = 'jobss.csv'
 jobs_data = pd.read_csv(file_path)
 jobs_data.dropna(subset=['Job Title'], inplace=True)
 
-# TF-IDF Vectorization
+
 tfidf = TfidfVectorizer()
 X = tfidf.fit_transform(jobs_data['Key Skills'].astype(str))
 
@@ -73,8 +70,6 @@ def predict():
         job_location = job['location']
 
         predicted_title, predicted_location = predict_job_title_and_location(job_title)
-
-        # Check if predicted title and location match the provided job title and location
         if job_title == predicted_title or job_location == predicted_location:
             results.append({'id': job_id})
 
