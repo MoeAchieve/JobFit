@@ -3,6 +3,12 @@ import NavBar from "@/components/ui/AppBar";
 import Footer from "@/components/ui/Footer";
 import SearchBar from "@/components/ui/SearchBar";
 import { Container, Grid } from "@mui/material";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Jobs | JobFit",
+  description: "Find the best jobs for you. JobFit is the best platform to find the best jobs for you.",
+};
 
 export default function Page({
   searchParams,

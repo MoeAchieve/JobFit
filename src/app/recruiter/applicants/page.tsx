@@ -1,10 +1,7 @@
 import ApplicantsTable from "@/components/recruiter/Applicants";
 import CompanyForm from "@/components/recruiter/CompanyForm";
-import NavBar from "@/components/ui/AppBar";
-import Footer from "@/components/ui/Footer";
 import { currentUser } from "@/lib/auth";
 import { ICompany } from "@/types";
-import { Container } from "@mui/material";
 
 const fetchUserCompany = async (id: string) => {
   const data = await fetch(`http://localhost:3000/api/user/${id}/company/`)
@@ -17,11 +14,7 @@ export default async function Page() {
   const company: ICompany[] = await fetchUserCompany(user!.id);
   return (
     <>
-      <NavBar />
-      <Container maxWidth="lg" component="main">
         {company.length ? <ApplicantsTable company={company[0]} /> : <CompanyForm />}
-      </Container>
-      <Footer />
     </>
   );
 }

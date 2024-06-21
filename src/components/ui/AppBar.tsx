@@ -23,7 +23,6 @@ import Image from "next/image";
 
 const settings = {
   Profile: "/profile",
-  Dashboard: "/dashboard",
 };
 
 const NavMenu = ({ anchorEl, handleClose, loggedIn }: any) => {
@@ -49,9 +48,12 @@ const NavMenu = ({ anchorEl, handleClose, loggedIn }: any) => {
       <MenuItem onClick={handleClose} component={Link} href="/jobs">
         <Typography textAlign="center">Jobs</Typography>
       </MenuItem>
-      <MenuItem onClick={handleClose} component={Link} href="/companies">
-        <Typography textAlign="center">Companies</Typography>
+      <MenuItem onClick={handleClose} component={Link} href="/applications">
+        <Typography textAlign="center">Applications</Typography>
       </MenuItem>
+      {/* <MenuItem onClick={handleClose} component={Link} href="/companies">
+        <Typography textAlign="center">Companies</Typography>
+      </MenuItem> */}
       {!loggedIn && (
         <div>
           <MenuItem onClick={handleClose} component={Link} href="/auth/login">
@@ -231,7 +233,8 @@ export default function NavBar() {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <NavButton variant="text" href="/jobs" label="Jobs" />
-            <NavButton variant="text" href="/companies" label="Companies" />
+            <NavButton variant="text" href="/applications" label="Applications" />
+            {/* <NavButton variant="text" href="/companies" label="Companies" /> */}
           </Box>
           {user ? (
             <Box sx={{ flexGrow: 0 }}>

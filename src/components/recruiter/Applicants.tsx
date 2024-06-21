@@ -21,7 +21,7 @@ import ViewModal from "./ViewModal";
 import ActionMenu from "./ActionMenu";
 import { Status } from "@prisma/client";
 
-function mapFromEnum(value: Status) {
+export function mapFromEnum(value: Status) {
   switch (value) {
     case "APPROVED":
       return <Chip label="Approved" variant="outlined" color="success" />;
@@ -33,15 +33,13 @@ function mapFromEnum(value: Status) {
 }
 
 export default function ApplicantsTable({ company }: { company: ICompany }) {
-  const user = useCurrentUser();
   const [applications, setApplications] = useState<Applicant[] | []>([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  if (!user) return;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/company/${company.id}/applicants/`)
+    fetch(`/api/company/${company.id}/applicants/`)
       .then((res) => res.json())
       .then((data) => setApplications(data));
   }, [applications]);

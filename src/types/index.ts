@@ -77,6 +77,17 @@ export interface IApplication {
   updatedAt: string;
 }
 
+export interface IApplicationView {
+  id: string;
+  job: IJob;
+  userId: string;
+  status: Status;
+  resume: string;
+  coverLetter: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface JobsQuery {
   location?: string[];
   type?: string[];

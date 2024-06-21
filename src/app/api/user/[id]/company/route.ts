@@ -1,6 +1,4 @@
 import { getUserCompanies } from '@/lib/actions/company';
-import { getPostedJobs } from '@/lib/actions/jobs';
-import { currentUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(_req: NextRequest,
