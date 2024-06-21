@@ -48,7 +48,7 @@ export async function POST(
     const body = await req.json();
     const validateed = createJobSchema.safeParse(body);
     if (!validateed.success) {
-      return NextResponse.json({ error: validateed.error.errors }, { status: 400 });
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
 
     const job = await createJob(body, user.id);

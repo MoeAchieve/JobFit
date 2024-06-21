@@ -34,9 +34,7 @@ function mapFromEnum(value: Status) {
 
 export default function ApplicantsTable({ company }: { company: ICompany }) {
   const user = useCurrentUser();
-  const [isPending, setIsPending] = useState<boolean>(false);
   const [applications, setApplications] = useState<Applicant[] | []>([]);
-  const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

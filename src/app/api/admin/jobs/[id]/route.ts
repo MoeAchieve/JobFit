@@ -1,11 +1,11 @@
-import { HttpError } from "@/errors";
 import { updateJobStatus } from "@/lib/actions/admin";
 import { currentRole } from "@/lib/auth";
-import { NextResponse } from "next/server";
-import { prisma } from '@/config/prisma';
+import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(req: NextResponse,
-  { params }: { params: { id: string } }) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const isAdmin = await currentRole();
     if (!isAdmin) {
@@ -23,14 +23,7 @@ export async function PUT(req: NextResponse,
     const { status } = body;
     await updateJobStatus(jobId, status);
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch (error: any) {
-    if (error instanceof HttpError) {
-      return NextResponse.json({
-        error: error.message,
-      }, { status: error.statusCode });
-    }
-    return NextResponse.json({
-      error: error,
-    }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 })
   }
 }

@@ -37,23 +37,20 @@ const setColor = (status: string) => {
 };
 
 export default function JobsTable({ company }: { company: ICompany }) {
-  const user = useCurrentUser();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  
-  if (!user) return;
+
   const [jobs, setJobs] = useState<IJob[] | []>([]);
 
   const handleArchive = async (id: string) => {
     setIsPending(true);
-    const res = await fetch(`http://localhost:3000/api/jobs/${id}`, {
+    const res = await fetch(`/api/jobs/${id}`, {
       method: "PUT",
       body: JSON.stringify({ status: JOB_STATUS.Archived }),
     });
     const data = await res.json();
-
     if (!data.success) {
       toast.error("Failed to update job status");
       setIsPending(false);
@@ -67,7 +64,7 @@ export default function JobsTable({ company }: { company: ICompany }) {
 
   const handleActive = async (id: string) => {
     setIsPending(true);
-    const res = await fetch(`http://localhost:3000/api/jobs/${id}`, {
+    const res = await fetch(`/api/jobs/${id}`, {
       method: "PUT",
       body: JSON.stringify({ status: JOB_STATUS.Active }),
     });
@@ -84,10 +81,14 @@ export default function JobsTable({ company }: { company: ICompany }) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/jobs?companyId=${company.id}`)
-      .then((res) => res.json())
-      .then((data) => setJobs(data.jobs));
-  }, [jobs]);
+    const fetchJobs = async () => {
+      const res = await fetch(`/api/jobs?companyId=${company.id}`);
+      const data = await res.json();
+      setJobs(data.jobs);
+    };
+
+    fetchJobs();
+  });
 
   return (
     <div>

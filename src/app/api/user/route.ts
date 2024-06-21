@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
   const validated = await changeUserDataSchema.safeParseAsync(body);
 
   if (!validated.success) {
-    return NextResponse.json({ error: validated.error }, { status: 400 });
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
 
   const updated = await updateUser(user.id, validated.data);

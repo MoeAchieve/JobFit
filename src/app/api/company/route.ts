@@ -23,9 +23,9 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     if (!validated.success) {
-      return NextResponse.json({ error: validated.error.errors }, { status: 400 });
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
-    
+
     const company = await createCompany(user.id, body);
     return NextResponse.json(company, { status: 201 });
   }

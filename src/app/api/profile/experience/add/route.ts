@@ -14,7 +14,7 @@ export async function POST(
   const body = await req.json();
   const validated = addExperienceSchema.safeParse(body);
   if (!validated.success) {
-    return NextResponse.json({ error: validated.error.errors }, { status: 400 });
+    return NextResponse.json({ error: "Invlaid input" }, { status: 400 });
   }
 
   const experience = await addExperience(user.id!, validated.data);

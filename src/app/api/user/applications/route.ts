@@ -1,6 +1,6 @@
-import { getPostedJobs } from '@/lib/actions/jobs';
 import { currentUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/config/prisma';
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
@@ -9,7 +9,15 @@ export async function GET(req: NextRequest, res: NextResponse) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const jobs = await getPostedJobs(user.id);
+    const jobs = await prisma.applicantion.findMany({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        job: true,
+      },
+    });
+    
     return NextResponse.json(jobs, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

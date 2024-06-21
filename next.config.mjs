@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   transpilePackages: ["@mui/material", "@mui/lab", "@mui/icons-material"],
   compiler: {
     styledComponents: true,

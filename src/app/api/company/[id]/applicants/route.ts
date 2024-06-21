@@ -1,11 +1,9 @@
-import { createCompany, getAllCompanies, getCompanyById } from "@/lib/actions/company";
-import { currentUser } from "@/lib/auth";
-import { createCompanySchema } from "@/lib/schemas";
+import { getCompanyById } from "@/lib/actions/company";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/config/prisma";
 
 export async function GET(
-  req: NextResponse,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

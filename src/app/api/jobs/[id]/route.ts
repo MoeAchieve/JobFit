@@ -1,11 +1,10 @@
-import { HttpError } from "@/errors";
 import { deleteJob, getJobById, updateJob } from "@/lib/actions/jobs";
 import { currentUser } from "@/lib/auth";
 import { editJobSchema } from "@/lib/schemas";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  req: NextResponse,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -23,7 +22,7 @@ export async function GET(
 }
 
 export async function PUT(
-  req: NextResponse,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -39,25 +38,17 @@ export async function PUT(
     }
     const validated = editJobSchema.safeParse(body);
     if (!validated.success) {
-      return NextResponse.json({ error: validated.error.errors }, { status: 400 });
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
     const updatedJob = await updateJob(user.id, jobId, validated.data);
     return NextResponse.json({ success: true, updatedJob }, { status: 201 });
   } catch (error: any) {
-    if (error instanceof HttpError) {
-      return NextResponse.json({
-        success: false,
-        error: error.message,
-      }, { status: error.statusCode });
-    }
-    return NextResponse.json({
-      error: error,
-    }, { status: 500 });
+    return NextResponse.json({ error: "Failed updating job" }, { status: 500 });
   }
 }
 
 export async function DELETE(
-  req: NextResponse,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

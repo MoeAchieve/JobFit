@@ -12,7 +12,7 @@ export async function PUT(req: NextRequest) {
   const validated = editProfileSchema.safeParse(body);
 
   if (!validated.success) {
-    return NextResponse.json({ error: validated.error }, { status: 400 });
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
 
   const { bio, location, website, resume } = validated.data;

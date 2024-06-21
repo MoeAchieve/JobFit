@@ -17,7 +17,7 @@ export async function PATCH(
 
   const validated = editExperienceSchema.safeParse(body);
   if (!validated.success) {
-    return NextResponse.json({ error: validated.error }, { status: 400 });
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
   const experience = await updateExperience(parseInt(id), validated.data);
 
