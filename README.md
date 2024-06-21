@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Job Fit Analyzer
+
+Job Fit Analyzer is a web application designed to facilitate job seekers and recruiters in the hiring process. It includes features such as job posting, job application, profile management, and AI-powered job recommendations.
+
+## Project Structure
+The project consists of a Next.js application that handles both the frontend and backend, with API interactions for core functionalities. Additionally, a Flask server is used exclusively to serve the endpoint for AI-powered job recommendations.
+
+![diagram1](https://github.com/M0Leo/job-fit-analyzer/assets/80783747/9e84db14-6d37-4e8f-9ecd-83d142051eb9)
+
+## SQL Schema Diagram
+
+![DB Diagram](https://github.com/M0Leo/job-fit-analyzer/assets/80783747/1deac693-4534-4f42-9d66-0b16f60e6606)
+   
+## User Types
+- **Admin**
+- **Job Seeker**
+- **Recruiter**
+
+## Admin Features
+- Full CRUD operations on:
+  - Applications
+  - Users
+  - Jobs
+  - Etc.
+
+## Job Seeker Features  
+1. Apply for a job.
+2. View/Update Profile.
+3. Create and edit their profiles with relevant information.
+4. View Applications.
+5. Upload CV/Resume.
+6. Verify Email and Phone number.
+
+## Recruiter Features
+1. Post a Job.
+2. Manage job status and details.
+3. View Applicants of the job.
+4. Download applicant’s CV.
+5. Accept or reject an application.
+
+## Job Search and Filters
+- Implementing a job search functionality with filters for:
+  - Location
+  - Industry
+  - Job type
+  - And more.
+ 
+## Email Service with Brevo
+- **Application Submission:**
+  - Send confirmation email when a job seeker applies for a job.
+- **Application Acceptance:**
+  - Notify job seeker via email when their application is accepted.
+- **Application Rejection:**
+  - Notify job seeker via email when their application is rejected.
+
+## AI-Powered Job Recommendation and Search
+- The AI system should analyze user preferences and job listings to provide personalized job recommendations.
+
+## Technologies & Libraries 
+
+### Frontend and Backend (Next.js)
+- **React**
+- **Next.js**
+- **TypeScript**
+- **Emotion**
+- **Material UI**
+- **Prisma**
+- **NextAuth.js**
+- **Nodemailer**
+- **React Hook Form**
+- **Day.js**
+- **React Icons**
+- **Sonner**
+- **Zod**
+- **Brevo (SendinBlue)**
+
+### Python (Flask)
+- **Flask**
+- **NumPy**
+- **Pandas**
+- **scikit-learn**
+- **fuzzywuzzy**
 
 ## Getting Started
 
-First, run the development server:
+Ensure that you have the following:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Node.js](https://nodejs.org/en) and npm
+- [MySQL](https://www.mysql.com/)
+- Create [brevo](https://www.brevo.com/) account, you'll need this for SMTP email services
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Clone the project repository:
+   Use Git to clone the project repository to your local machine.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```bash
+   git clone https://github.com/M0Leo/job-fit-analyzer.git
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+2. Navigate to the Project Directory
+   Change your current directory to the project folder.
 
-## Learn More
+   ```bash
+   cd job-fit-analyzer
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. Set up environment variables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   Simply add the environment variables in your application by creating a .env file based on the provided .env.example template and replacing the example values with your actual configuration.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+5. Install project dependencies:
+   Use npm to install the project dependencies specified in the package.json file.
 
-## Deploy on Vercel
+   ```bash
+   npm install
+   ```
+6. Prisma configurations & Database seeding
+   ```bash
+   npx prisma migrate dev
+   ```
+   Seeding the database
+   ```bash
+   npm run seed
+   ```
+6. Run Flask server
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+     npm run flask-dev
+     # or
+     npm run flask-prod
+    ```
+7. Run for development mode
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   npm run dev
+   ```
+8. Build & Start for production mode
+   ```bash
+   npm run build
+   npm run start
+   ```
+
