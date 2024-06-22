@@ -57,6 +57,21 @@ export const deleteUser = async (id: string) => {
   }
 }
 
+export const getCompanyByUserId = async (id: string) => {
+  try {
+    const company = await prisma.company.findFirst({
+      where: {
+        user: {
+          id,
+        }
+      },
+    });
+    return company;
+  } catch (error) {
+    return error;
+  }
+}
+
 export const uploadImage = async (id: string, path: string) => {
   try {
     return prisma.user.update({

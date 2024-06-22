@@ -12,7 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { mapFromEnum } from "./recruiter/Applicants";
+import { mapFromEnum } from "./recruiter/ApplicantsTable";
 import dayjs from "dayjs";
 
 export default function Applications({ id }: { id: string }) {

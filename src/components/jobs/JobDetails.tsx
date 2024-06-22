@@ -74,7 +74,7 @@ export default function JobDetails({
             {selectedJob.company.location}
           </Typography>
           <Typography variant="body1">
-            {formatAsPostedX(selectedJob.createdAt)} - {selectedJob.applicants?.length || 0} applicants
+            {formatAsPostedX(selectedJob.createdAt)}
           </Typography>
           <Button
             variant="contained"

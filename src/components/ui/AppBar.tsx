@@ -141,7 +141,7 @@ const UserMenu = ({ anchorEl, handleClose, user }: any) => {
           </MenuItem>
         </div>
       ) : (
-        <MenuItem onClick={handleClose} component={Link} href="/recruiter">
+        <MenuItem onClick={handleClose} component={Link} href="/recruiter/joblisting">
           <Button variant="text" fullWidth>
             Post Job
           </Button>

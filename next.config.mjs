@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  swcMinify: true,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -28,7 +29,7 @@ const nextConfig = {
         hostname: "files.edgestore.dev",
         port: "",
         pathname: "/**",
-      }
+      },
     ],
   },
 };
