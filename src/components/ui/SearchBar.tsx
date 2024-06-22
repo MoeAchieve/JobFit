@@ -1,16 +1,23 @@
 "use client";
 
-import { Box, Button, Divider, Input, InputAdornment } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Input,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import { GoSearch } from "react-icons/go";
 import { FaLocationDot } from "react-icons/fa6";
-import {  redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SearchBar() {
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState("");
   const router = useRouter();
-  
+
   const handleSearch = () => {
     const params = new URLSearchParams();
     params.set("keyword", keyword); // Always include keyword in search
@@ -25,6 +32,7 @@ export default function SearchBar() {
     <Box
       border="1px solid #eee"
       p={3}
+      height="3rem"
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -38,7 +46,7 @@ export default function SearchBar() {
         placeholder="Search for jobs"
         startAdornment={
           <InputAdornment position="start">
-            <GoSearch />
+            <GoSearch style={{ fontSize: "1.5rem" }} />
           </InputAdornment>
         }
         onChange={(e) => setKeyword(e.target.value)}
@@ -51,7 +59,7 @@ export default function SearchBar() {
         placeholder="Location"
         startAdornment={
           <InputAdornment position="start">
-            <FaLocationDot />
+            <FaLocationDot style={{ fontSize: "1.5rem" }} />
           </InputAdornment>
         }
         onChange={(e) => setLocation(e.target.value)}

@@ -89,8 +89,8 @@ export interface IApplicationView {
 }
 
 export interface JobsQuery {
-  location?: string[];
-  type?: string[];
+  location?: string;
+  type?: string;
   status?: number;
   keyword?: string;
   recruiterId?: string;

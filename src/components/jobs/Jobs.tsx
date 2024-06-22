@@ -5,9 +5,10 @@ import { useEffect, useState, useTransition } from "react";
 import Job from "./Job";
 import JobsSkeleton from "./Skeleton";
 import Paginate from "./Paginate";
-import { Chip, Grid, Typography } from "@mui/material";
+import { Chip, Grid, Select, Typography } from "@mui/material";
 import JobDetails from "./JobDetails";
 import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const types = [
   { label: "Full Time", value: "FullTime" },
@@ -22,30 +23,39 @@ interface Props {
   query?: any;
 }
 
-export default function Jobs({ page = 1, limit = 10, query }: Props) {
+export default function Jobs({ page = 1, limit = 10 }: Props) {
   const [jobs, setJobs] = useState<IJob[]>([]);
   const [isPending, startTransition] = useTransition();
   const [pages, setPages] = useState(1);
   const [selectedJobId, setSelectedJobId] = useState("");
+  const searchParams = useSearchParams();
+  const [searchParam, setSearchParam] = useState({
+    type: searchParams.get("type") || "",
+  });
+  const router = useRouter();
+
+  useEffect(() => {
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set("type", searchParam.type.toString());
+    router.replace(`jobs?${newParams.toString()}`);
+
+    console.log(searchParam)
+  }, [searchParams, router, searchParam]);
+
   const handleJobClick = (id: string) => setSelectedJobId(id);
-  if (query) {
-    query = Object.keys(query)
-      .map((key) => `${key}=${query[key]}`)
-      .join("&");
-  }
   useEffect(() => {
     startTransition(() => {
-      fetch(`/api/jobs?page=${page}&limit=${limit}&status=1&${query}`)
+      fetch(`/api/jobs?page=${page}&limit=${limit}&status=1?type=${searchParam ? searchParam : ""}`)
         .then((res) => res.json())
         .then((data) => {
           setJobs(data.jobs);
           setPages(data.pages);
         });
     });
-  }, [page, query]);
+  }, [page, searchParam]);
 
   const handleClick = () => {
-    startTransition( async () => {
+    startTransition(async () => {
       const res = await fetch(`/api/jobs/recommended`);
       const data = await res.json();
       if (!data.success) {
@@ -57,11 +67,28 @@ export default function Jobs({ page = 1, limit = 10, query }: Props) {
       setJobs(data.jobs);
       setPages(data.pages);
     });
-  }
+  };
 
   return (
     <>
       <Grid item sm={12} md={4}>
+        <Select
+          native
+          value={searchParam}
+          onChange={(e) => {
+            console.log(e.target.value)
+            setSearchParam({
+              type: e.target.value,
+            })
+          }}
+        >
+          <option value="">All</option>
+          {types.map((type) => (
+            <option key={type.value} value={type.value}>
+              {type.label}
+            </option>
+          ))}
+        </Select>
         <Chip
           label="View Recommendations"
           variant="outlined"
