@@ -1,3 +1,4 @@
+import { JOB_STATUS } from "@prisma/client";
 import { z } from "zod";
 
 export const LoginSchema = z.object({
@@ -140,9 +141,7 @@ export const editJobSchema = z.object({
   type: z.optional(z.string().min(1, {
     message: "Type is required",
   })),
-  status: z.optional(z.string().min(1, {
-    message: "Status is required",
-  })),
+  status: z.enum(['Expired', 'Active', 'Archived']).optional(),
   company: z.optional(z.number().min(1, {
     message: "Company is required",
   })),

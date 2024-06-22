@@ -20,7 +20,6 @@ export default function Job({
   onJobClick
 }: Props) {
 
-
   return (
     <Card
       variant="outlined"

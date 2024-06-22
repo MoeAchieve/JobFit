@@ -8,9 +8,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id);
+    const companyId = parseInt(params.id);
 
-    const job = await getJobById(id);
+    const job = await getJobById(companyId);
     if (!job) {
       return NextResponse.json({ error: "Job not found" }, { status: 404 });
     }
@@ -32,14 +32,26 @@ export async function PUT(
     }
     const jobId = parseInt(params.id);
     const body = await req.json();
-    const job = await getJobById(jobId);
+    const job = await prisma.job.findUnique({
+      where: {
+        id: jobId,
+      },
+    })
+
     if (!job) {
       return NextResponse.json({ error: "Job not found" }, { status: 404 });
     }
+
+    if (job.userId !== user.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const validated = editJobSchema.safeParse(body);
+
     if (!validated.success) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
+
     const updatedJob = await updateJob(user.id, jobId, validated.data);
     return NextResponse.json({ success: true, updatedJob }, { status: 201 });
   } catch (error: any) {

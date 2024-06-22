@@ -76,7 +76,6 @@ export async function PUT(
         }
       }
     });
-    console.log(updatedApplication);
     
 
     const mail = new MailService();

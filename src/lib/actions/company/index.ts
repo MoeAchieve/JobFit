@@ -67,7 +67,7 @@ export async function getUserCompanies(recruiterId: string) {
         recruiterId,
       }
     })
-    return companies;
+    return companies[0];
   } catch (error) {
     return error;
   }

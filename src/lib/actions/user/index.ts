@@ -59,14 +59,15 @@ export const deleteUser = async (id: string) => {
 
 export const getCompanyByUserId = async (id: string) => {
   try {
-    const company = await prisma.company.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
-        user: {
-          id,
-        }
+        id,
+      },
+      include: {
+        companies: true,
       },
     });
-    return company;
+    return user?.companies[0];
   } catch (error) {
     return error;
   }

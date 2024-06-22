@@ -3,7 +3,6 @@ import { createJobApplication, getJobApplications } from "@/lib/actions/jobs";
 import { currentUser } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
-
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }

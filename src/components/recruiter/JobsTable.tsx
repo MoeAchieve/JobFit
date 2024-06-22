@@ -1,6 +1,5 @@
 "use client";
 
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { ICompany, IJob } from "@/types";
 import {
   TableContainer,
@@ -56,8 +55,9 @@ export default function JobsTable({ company }: { company: ICompany }) {
       setIsPending(false);
       return;
     }
-    const job: IJob = data;
-    setJobs((prev) => prev.map((j) => (j.id === job.id ? job : j)));
+    const job: IJob = data.updatedJob;
+    const updatedJob = jobs.map((j) => (j.id === job.id ? job : j));
+    setJobs(updatedJob);
     setIsPending(false);
     toast.success("Job status updated successfully");
   };
@@ -74,21 +74,22 @@ export default function JobsTable({ company }: { company: ICompany }) {
       setIsPending(false);
       return;
     }
-    const job: IJob = data;
-    setJobs((prev) => prev.map((j) => (j.id === job.id ? job : j)));
+    const job: IJob = data.updatedJob;
+    const updatedJob = jobs.map((j) => (j.id === job.id ? job : j));
+    setJobs(updatedJob);
     setIsPending(false);
     toast.success("Job status updated successfully");
   };
 
   useEffect(() => {
     const fetchJobs = async () => {
-      const res = await fetch(`/api/jobs?companyId=${company.id}`);
+      const res = await fetch(`/api/company/${company.id}/jobs`);
       const data = await res.json();
       setJobs(data.jobs);
     };
 
     fetchJobs();
-  });
+  }, []);
 
   return (
     <div>
