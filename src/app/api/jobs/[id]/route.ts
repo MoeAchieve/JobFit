@@ -1,7 +1,9 @@
-import { deleteJob, getJobById, updateJob } from "@/lib/actions/jobs";
+import { deleteJob, getJobById } from "@/lib/actions/jobs";
 import { currentUser } from "@/lib/auth";
 import { editJobSchema } from "@/lib/schemas";
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/config/prisma";
+
 
 export async function GET(
   req: NextRequest,
@@ -47,12 +49,20 @@ export async function PUT(
     }
 
     const validated = editJobSchema.safeParse(body);
-
+    
     if (!validated.success) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
+    
+    const updatedJob = await prisma.job.update({
+      where: {
+        id: jobId,
+      },
+      data: {
+        ...validated.data,
+      }
+    });
 
-    const updatedJob = await updateJob(user.id, jobId, validated.data);
     return NextResponse.json({ success: true, updatedJob }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: "Failed updating job" }, { status: 500 });

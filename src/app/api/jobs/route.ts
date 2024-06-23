@@ -9,8 +9,7 @@ export async function GET(
   req: NextRequest,
 ) {
   try {
-    const params = new URL(req.url).searchParams;
-    console.log(params);
+    const params = req.nextUrl.searchParams;
     const location = params.get("location");
     const type = params.get("type");
     const status = params.get("status") ? parseInt(params.get("status") as string) : 0;
@@ -20,14 +19,12 @@ export async function GET(
     const recruiterId = params.get("recruiterId");
 
     const query: JobsQuery = {
-      location: location,
-      type: type,
+      location: location ?? undefined,
+      type: type ?? undefined,
       status: status,
       keyword: keyword ?? undefined,
       recruiterId: recruiterId ?? undefined,
     };
-
-    console.log(query);
 
     const { jobs, count } = await getAllJobs(query, (page - 1) * limit, limit) as { jobs: Job[]; count: number; };
 

@@ -6,8 +6,10 @@ import CompanyForm from "./CompanyForm";
 
 export default async function Applicants() {
   const user = await currentUser();
-  const company: ICompany = await getCompanyByUserId(user.id);
-  
+  if (!user) {
+    return null;
+  }
+  const company: ICompany = await getCompanyByUserId(user.id) as ICompany;
   if (!company) {
     return <CompanyForm />;
   }

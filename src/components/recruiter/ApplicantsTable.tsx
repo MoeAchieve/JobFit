@@ -107,8 +107,8 @@ export default function ApplicantsTable({ company }: { company: ICompany }) {
                       </Box>
                     </TableCell>
                     <ViewModal
-                      handleClose={handleClose}
                       open={open}
+                      handleClose={handleClose}
                       coverLetter={application.coverLetter}
                       resume={application.resume}
                     />

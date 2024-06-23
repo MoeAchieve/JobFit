@@ -5,10 +5,9 @@ import { useEffect, useState, useTransition } from "react";
 import Job from "./Job";
 import JobsSkeleton from "./Skeleton";
 import Paginate from "./Paginate";
-import { Chip, Grid, Select, Typography } from "@mui/material";
+import { Chip, Grid, Typography } from "@mui/material";
 import JobDetails from "./JobDetails";
 import { toast } from "sonner";
-import { useRouter, useSearchParams } from "next/navigation";
 
 const types = [
   { label: "Full Time", value: "FullTime" },
@@ -28,31 +27,31 @@ export default function Jobs({ page = 1, limit = 10 }: Props) {
   const [isPending, startTransition] = useTransition();
   const [pages, setPages] = useState(1);
   const [selectedJobId, setSelectedJobId] = useState("");
-  const searchParams = useSearchParams();
-  const [searchParam, setSearchParam] = useState({
-    type: searchParams.get("type") || "",
-  });
-  const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const [searchParam, setSearchParam] = useState({
+  //   type: searchParams.get("type") || "",
+  // });
+  // const router = useRouter();
 
-  useEffect(() => {
-    const newParams = new URLSearchParams(window.location.search);
-    newParams.set("type", searchParam.type.toString());
-    router.replace(`jobs?${newParams.toString()}`);
+  // useEffect(() => {
+  //   const newParams = new URLSearchParams(window.location.search);
+  //   newParams.set("type", searchParam.type.toString());
+  //   router.replace(`jobs?${newParams.toString()}`);
 
-    console.log(searchParam)
-  }, [searchParams, router, searchParam]);
+  //   console.log(searchParam)
+  // }, [searchParams, router, searchParam]);
 
   const handleJobClick = (id: string) => setSelectedJobId(id);
   useEffect(() => {
     startTransition(() => {
-      fetch(`/api/jobs?page=${page}&limit=${limit}&status=1?type=${searchParam ? searchParam : ""}`)
+      fetch(`/api/jobs?page=${page}&limit=${limit}&status=1`)
         .then((res) => res.json())
         .then((data) => {
           setJobs(data.jobs);
           setPages(data.pages);
         });
     });
-  }, [page, searchParam]);
+  }, [page]);
 
   const handleClick = () => {
     startTransition(async () => {
@@ -72,7 +71,7 @@ export default function Jobs({ page = 1, limit = 10 }: Props) {
   return (
     <>
       <Grid item sm={12} md={4}>
-        <Select
+        {/* <Select
           native
           value={searchParam}
           onChange={(e) => {
@@ -88,7 +87,7 @@ export default function Jobs({ page = 1, limit = 10 }: Props) {
               {type.label}
             </option>
           ))}
-        </Select>
+        </Select> */}
         <Chip
           label="View Recommendations"
           variant="outlined"

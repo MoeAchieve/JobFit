@@ -199,15 +199,25 @@ export async function getUserApplications(userId: string) {
 
 export async function createJobApplication(userId: string, jobId: number, data: any) {
   try {
-    const hasUserApplied = await prisma.applicantion.findFirst({
+    const job = await prisma.job.findUnique({
       where: {
-        userId,
-        jobId
+        id: jobId
+      },
+      include: {
+        applicants: true,
       }
     });
 
-    if (hasUserApplied) {
-      throw new HttpError("User has already applied for this job", 400);
+    if (!job) {
+      throw new HttpError("Job not found", 404);
+    }
+
+    if (job.userId === userId) {
+      throw new HttpError("You cannot apply for your own job", 400);
+    }
+
+    if (job.applicants.some(applicant => applicant.userId === userId)) {
+      throw new HttpError("You already applied for this job", 400);
     }
 
     const application = await prisma.applicantion.create({

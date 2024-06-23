@@ -6,7 +6,10 @@ import { getUserCompanies } from "@/lib/actions/company";
 
 export default async function JobListing() {
   const user = await currentUser();
-  const company: ICompany = await getUserCompanies(user.id);
+  if (!user) {
+    return null;
+  }
+  const company: ICompany = await getUserCompanies(user.id) as ICompany;
   if (!company) {
     return <CompanyForm />;
   }

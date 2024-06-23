@@ -100,6 +100,11 @@ export default function ApplyModal({
           },
         });
 
+        if (!res) {
+          toast.error("Error uploading resume");
+          return;
+        }
+        
         const resume = await fetch(`/api/profile/edit/`, {
           method: "PUT",
           body: JSON.stringify({ resume: res.url }),
@@ -122,8 +127,6 @@ export default function ApplyModal({
     <Modal
       open={open}
       onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
     >
       <Box sx={style} component="form" onSubmit={handleSubmit}>
         <TextField

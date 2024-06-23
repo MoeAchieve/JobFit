@@ -56,36 +56,29 @@ const useFormHandler = (
 
   const onSubmit = async (values: any) => {
     if (mode === "add") {
-      const res = await fetch("/api/jobs/", {
+      await fetch("/api/jobs/", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
           "Content-Type": "application/json",
         },
+      }).then(() => {
+        form.reset();
+        handleClose();
+        toast.success("Job added successfully");
       });
-
-      const data = await res.json();
-
-      if (!data.success) {
-        return;
-      }
-      handleClose()
-      toast.success("Job added successfully");
     } else if (mode === "edit") {
-      const res = await fetch(`/api/jobs/${job?.id}`, {
+      await fetch(`/api/jobs/${job?.id}`, {
         method: "PUT",
         body: JSON.stringify(values),
         headers: {
           "Content-Type": "application/json",
         },
+      }).then(() => {
+        form.reset();
+        handleClose();
+        toast.success("Job updated successfully");
       });
-
-      const data = await res.json();
-      if (!data.success) {
-        return;
-      }
-      handleClose();
-      toast.success("Job updated successfully");
     }
 
     startTransition(() => {
@@ -111,11 +104,7 @@ export default function JobModal({
   job,
   mode,
 }: JobModal) {
-    const handleCancel = () => {
-      form.reset();
-      handleClose();
-    };
-  const { form, onSubmit } = useFormHandler(mode, handleCancel, company, job);
+  const { form, onSubmit } = useFormHandler(mode, handleClose, company, job);
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -230,7 +219,7 @@ export default function JobModal({
               <Button type="submit" variant="contained">
                 Submit
               </Button>
-              <Button variant="contained" onClick={handleCancel}>
+              <Button variant="contained" onClick={handleClose}>
                 Cancel
               </Button>
             </Box>

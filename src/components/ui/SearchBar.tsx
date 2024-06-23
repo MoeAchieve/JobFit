@@ -20,9 +20,9 @@ export default function SearchBar() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    params.set("keyword", keyword); // Always include keyword in search
+    params.set("keyword", keyword);
     if (location) {
-      params.set("location", location); // Include location if provided
+      params.set("location", location);
     }
 
     router.push(`/jobs?${params.toString()}`);
@@ -46,7 +46,7 @@ export default function SearchBar() {
         placeholder="Search for jobs"
         startAdornment={
           <InputAdornment position="start">
-            <GoSearch style={{ fontSize: "1.5rem" }} />
+            <GoSearch />
           </InputAdornment>
         }
         onChange={(e) => setKeyword(e.target.value)}
@@ -59,7 +59,7 @@ export default function SearchBar() {
         placeholder="Location"
         startAdornment={
           <InputAdornment position="start">
-            <FaLocationDot style={{ fontSize: "1.5rem" }} />
+            <FaLocationDot />
           </InputAdornment>
         }
         onChange={(e) => setLocation(e.target.value)}

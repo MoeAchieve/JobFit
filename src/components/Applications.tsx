@@ -15,7 +15,7 @@ import {
 import { mapFromEnum } from "./recruiter/ApplicantsTable";
 import dayjs from "dayjs";
 
-export default function Applications({ id }: { id: string }) {
+export default function Applications({ id }: { id: string | undefined}) {
   const [applications, setApplications] = useState<IApplicationView[]>([]);
 
   useEffect(() => {

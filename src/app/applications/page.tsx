@@ -7,12 +7,13 @@ import { Suspense } from "react";
 
 export default async function Page() {
   const user = await currentUser();
+
   return (
     <>
     <NavBar />
       <Container maxWidth="lg" component="main">
         <Suspense fallback={<div>Loading...</div>}>
-          <Applications id={user.id} />
+          <Applications id={user && user.id} />
         </Suspense>
       </Container>
       <Footer />

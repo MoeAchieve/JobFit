@@ -61,7 +61,7 @@ export interface IJob {
   userId: string;
   status: JOB_STATUS;
   applicants: IApplication[];
-  type: string;
+  type: JOB_TYPE;
   image: string;
   createdAt: string;
 }

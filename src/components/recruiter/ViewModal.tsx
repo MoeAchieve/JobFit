@@ -16,8 +16,8 @@ const style = {
 };
 
 interface IViewModal {
-  handleClose: () => void;
   open: boolean;
+  handleClose: () => void;
   coverLetter?: string;
   resume?: string;
 }

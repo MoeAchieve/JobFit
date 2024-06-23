@@ -138,13 +138,8 @@ export const editJobSchema = z.object({
   location: z.optional(z.string().min(1, {
     message: "Location is required",
   })),
-  type: z.optional(z.string().min(1, {
-    message: "Type is required",
-  })),
+  type: z.enum(['FullTime', 'PartTime', 'Contract', 'Internship', 'Temporary', 'Volunteer']).optional(),
   status: z.enum(['Expired', 'Active', 'Archived']).optional(),
-  company: z.optional(z.number().min(1, {
-    message: "Company is required",
-  })),
 });
 
 export const createCompanySchema = z.object({
