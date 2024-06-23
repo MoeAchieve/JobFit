@@ -6,7 +6,6 @@ import {
   Divider,
   Input,
   InputAdornment,
-  TextField,
 } from "@mui/material";
 import { GoSearch } from "react-icons/go";
 import { FaLocationDot } from "react-icons/fa6";

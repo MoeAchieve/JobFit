@@ -22,7 +22,7 @@ interface Props {
   query?: any;
 }
 
-export default function Jobs({ page = 1, limit = 10 }: Props) {
+export default function Jobs({ page = 1, limit = 10, query }: Props) {
   const [jobs, setJobs] = useState<IJob[]>([]);
   const [isPending, startTransition] = useTransition();
   const [pages, setPages] = useState(1);
@@ -42,16 +42,21 @@ export default function Jobs({ page = 1, limit = 10 }: Props) {
   // }, [searchParams, router, searchParam]);
 
   const handleJobClick = (id: string) => setSelectedJobId(id);
+  if (query) {
+    query = Object.keys(query)
+      .map((key) => `${key}=${query[key]}`)
+      .join("&");
+  }   
   useEffect(() => {
     startTransition(() => {
-      fetch(`/api/jobs?page=${page}&limit=${limit}&status=1`)
+      fetch(`/api/jobs?page=${page}&limit=${limit}&status=1&${query}`)
         .then((res) => res.json())
         .then((data) => {
           setJobs(data.jobs);
           setPages(data.pages);
         });
     });
-  }, [page]);
+  }, [page, query]);
 
   const handleClick = () => {
     startTransition(async () => {
