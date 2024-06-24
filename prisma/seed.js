@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const skills = require("./seeds/skills.json");
+const jobs = require("./seeds/jobs.json");
 const bcrypt = require("bcryptjs");
 
 async function main() {
@@ -16,18 +17,53 @@ async function main() {
   console.log("Seeded skills table");
 
   const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
-  await prisma.user.create({
+  const admin = await prisma.user.create({
     data: {
       email: process.env.ADMIN_EMAIL,
       name: process.env.ADMIN_NAME,
       password: hashedPassword,
       role: "ADMIN",
       profile: {
-        create: {}
+        create: {},
+      },
+      companies: {
+        create: {
+          name: "SiliconMaze",
+          description: "Digital Transformation Company",
+          location: "Lagos, Nigeria",
+          website: "https://siliconmaze.com",
+        },
       },
     },
-  })
-  console.log("Initial admin created");
+  });
+
+  const company = await prisma.company.findFirst({
+    where: {
+      user: {
+        id: admin.id,
+      },
+    },
+  });
+
+  for (let job of jobs) {
+    await prisma.job.create({
+      data: {
+        ...job,
+        company: {
+          connect: {
+            id: company.id,
+          },
+        },
+        user: {
+          connect: {
+            id: admin.id,
+          },
+        },
+      },
+    });
+  }
+
+  console.log("Initial admin created with company and jobs");
 }
 
 main()
