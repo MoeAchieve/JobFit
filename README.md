@@ -1,6 +1,6 @@
-# Job Fit Analyzer
+# JobFit
 
-Job Fit Analyzer is a web application designed to facilitate job seekers and recruiters in the hiring process. It includes features such as job posting, job application, profile management, and AI-powered job recommendations.
+Job Fit is a web application designed to facilitate job seekers and recruiters in the hiring process. It includes features such as job posting, job application, profile management, and AI-powered job recommendations.
 
 ## Project Structure
 The project consists of a Next.js application that handles both the frontend and backend, with API interactions for core functionalities. Additionally, a Flask server is used exclusively to serve the endpoint for AI-powered job recommendations.
